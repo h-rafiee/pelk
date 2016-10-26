@@ -1,0 +1,8 @@
+.idea
+css/*
+!css/index.php
+
+less/*.less.cache
+
+uploads
+nbproject/*
