@@ -11,6 +11,10 @@
 |
 */
 
+Route::get('/admin',function(){
+   return view('admin.index',['Hello'=>'Salam']);
+});
+
 Route::get('/', function () {
     return view('welcome');
 });
