@@ -36,8 +36,6 @@
 
 
 @include('admin.objects.scripts_core_libs')
-
-@include('admin.objects.scripts_core_libs')
 @include('admin.objects.scripts_admin')
 @yield('scripts')
 </body>

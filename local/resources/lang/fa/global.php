@@ -12,4 +12,6 @@ return [
     'upload' => 'آپلود',
     'empty' => 'خالی',
     'access'=>'دسترسی',
+    'remember_me'=>'من را بخاطر بسپار',
+    'settings'=>'تنظیمات',
 ];
