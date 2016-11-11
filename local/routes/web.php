@@ -11,9 +11,32 @@
 |
 */
 
-Route::get('/admin',function(){
-   return view('admin.index',['Hello'=>'Salam']);
+Route::group(['prefix'=>'admin','namespace'=>'Admin','middleware'=>'admin.auth'],function(){
+    Route::get('/',function(){
+        return view('admin.index');
+    });
+    Route::get('logout','AdminController@logout');
+
+   // Administrators
+    Route::resource('administrators','AdministratorController');
+
+   // Users
+    Route::resource('users','UserController');
+
+    // Tags
+    Route::resource('tags','TagController');
+
+    // Categories
+    Route::resource('categories','CategoryController');
+
+    // Book
+    Route::resource('books','BookController');
+
+
 });
+Route::get('/admin-login',['middleware' => 'admin.guest','uses'=>'Admin\AdminController@getLogin']);
+Route::post('/admin-login',['middleware' => 'admin.guest','uses'=>'Admin\AdminController@postLogin']);
+
 
 Route::get('/', function () {
     return view('welcome');
