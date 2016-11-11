@@ -25,6 +25,8 @@ class CreateBooksTable extends Migration
                 ->onDelete('cascade');
             $table->string('slug')->unique();
             $table->string('title');
+            $table->string('price')->default('0');
+            $table->string('file');
             $table->text('description')->nullable();
             $table->longText('text')->nullable();
             $table->string('image')->nullable();

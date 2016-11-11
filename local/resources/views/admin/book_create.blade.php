@@ -33,7 +33,7 @@
                 @if(empty($model))
                 <form action="{{url('admin/books')}}" method="post" class="form" enctype="multipart/form-data">
                 @else
-                    <form action="{{url('admin/books/'.$model->id)}}" method="post" class="form">
+                    <form action="{{url('admin/books/'.$model->id)}}" method="post" class="form" enctype="multipart/form-data">
                         {{ method_field('PUT') }}
                         @endif
                         {{csrf_field()}}
@@ -94,6 +94,17 @@
                             <label for="publish_date">تاریخ انتشار :</label>
                             <input type="text" class="form-control pwtdatepicker" value="{{@$model->publish_date}}" name="publish_date" id="publish_date" placeholder="تاریخ انتشار ..." required>
                         </div>
+                        <div class="form-group">
+                            <label for="price">قیمت :</label>
+                            <input type="number" class="form-control" value="{{@$model->price}}" name="price" id="price" placeholder="قیمت ..." min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="file">فایل کتاب :</label>
+                            <input type="file" name="file" id="file" placeholder="فایل کتاب ..." min="0">
+                            @if(@$model)
+                            <span id="helpBlock" class="help-block">فایل کتاب <a href="{!! url($model->file) !!}" target="_blank">{!! $model->title !!}</a></span>
+                            @endif
+                        </div>
                         <hr>
                         <div class="form-group">
                             <label for="description">خلاصه متن :</label>
@@ -110,7 +121,6 @@
                             <br>
                             <div class="imagePreview" data-img="preview1" {{(@$model)?'style=display:inline-block;background-image:url('.url(@$model->image).');':''}}></div>
                         </div>
-
                         <hr>
                         <div class="form-group">
                             <button class="btn btn-primary"><span class="fa fa-save"></span> {!! trans('global.save').' '.trans('admin.book') !!}</button>
