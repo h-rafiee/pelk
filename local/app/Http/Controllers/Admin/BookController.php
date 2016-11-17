@@ -220,6 +220,7 @@ class BookController extends Controller
         $input = $request->all();
         $input['title']= trim($input['title']);
         $input['isbn']= trim($input['isbn']);
+        $input['publication']= trim($input['publication']);
         $request->replace($input);
         $rules = [
             'title'=>'required',
@@ -276,6 +277,8 @@ class BookController extends Controller
         $book->title = $request->get('title');
         $book->price = $request->get('price');
         if(!empty($bookURL)){
+            if(file_exists(public_path($book->file)))
+                unlink(public_path($book->file));
             $book->file = $bookURL;
         }
         $book->description = $request->get('description');
@@ -283,6 +286,8 @@ class BookController extends Controller
         $book->isbn = $request->get('isbn');
         $book->publish_date = $request->get('publish_date');
         if(!empty($fileURL)){
+            if(file_exists(public_path($book->image)))
+                unlink(public_path($book->image));
             $book->image = $fileURL;
         }
         $book->active = ($request->has('active'))?1:0;
