@@ -65,7 +65,7 @@
                         </div>
                         <div class="form-group">
                             <label for="tag">برچسب :</label>
-                            <select name="tags[]" id="select-tools" multiple placeholder="برچسب را انتخاب کنید...">
+                            <select name="tags[]" class="tag-selectize" multiple placeholder="برچسب را انتخاب کنید...">
                                 @if(@$model)
                                     @foreach($model->tags as $key=>$value)
                                         <option value="{{$value->id}}" selected="selected">{{$value->value}}</option>
@@ -76,15 +76,31 @@
                         <hr>
                         <div class="form-group">
                             <label for="writers">نویسنده :</label>
-                            <input type="text" class="input-selectize" value="{{@$writers}}" name="writers" id="writers" placeholder="نویسنده ..." required>
+                            <select name="writers[]" class="writer-selectize" multiple placeholder="نویسنده را انتخاب کنید...">
+                                @if(@$model)
+                                    @foreach($model->writers as $key=>$value)
+                                        <option value="{{$value->id}}" selected="selected">{{$value->name}}</option>
+                                    @endforeach
+                                @endif
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="translators">مترجم :</label>
-                            <input type="text" class="input-selectize" value="{{@$translators}}" name="translators" id="translators" placeholder="مترجم ...">
+                            <select name="translators[]" class="translator-selectize" multiple placeholder="مترجم را انتخاب کنید...">
+                                @if(@$model)
+                                    @foreach($model->translators as $key=>$value)
+                                        <option value="{{$value->id}}" selected="selected">{{$value->name}}</option>
+                                    @endforeach
+                                @endif
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="publication">ناشر :</label>
-                            <input type="text" class="form-control" value="{{@$model->publication->title}}" name="publication" id="publication" placeholder="ناشر ..." required>
+                            <select name="publication" class="publication-selectize" multiple placeholder="ناشر را انتخاب کنید...">
+                                @if(@$model)
+                                    <option value="{{$model->publication->id}}" selected="selected">{{$model->publication->title}}</option>
+                                @endif
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="isbn">شابک :</label>
@@ -133,7 +149,11 @@
 
 @section('scripts')
     @include('admin.objects.scripts_tinymce')
-    @include('admin.objects.scripts_selectize',['tags'=>$tags])
+    @include('admin.objects.scripts_selectize',[
+    'tags'=>$tags,
+    'publications'=>$publications,
+    'writers'=>$writers,
+    'translators'=>$translators])
     @include('admin.objects.scripts_pwtdatepicker')
     <script>
         $(".uploadFile").on("change", function()

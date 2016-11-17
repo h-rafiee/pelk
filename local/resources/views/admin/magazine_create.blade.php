@@ -65,7 +65,7 @@
                         </div>
                         <div class="form-group">
                             <label for="tag">برچسب :</label>
-                            <select name="tags[]" id="select-tools" multiple placeholder="برچسب را انتخاب کنید...">
+                            <select name="tags[]" class="tag-selectize" multiple placeholder="برچسب را انتخاب کنید...">
                                 @if(@$model)
                                     @foreach($model->tags as $key=>$value)
                                         <option value="{{$value->id}}" selected="selected">{{$value->value}}</option>
@@ -76,7 +76,11 @@
                         <hr>
                         <div class="form-group">
                             <label for="publication">ناشر :</label>
-                            <input type="text" class="form-control" value="{{@$model->publication->title}}" name="publication" id="publication" placeholder="ناشر ..." required>
+                            <select name="publication" class="publication-selectize" multiple placeholder="ناشر را انتخاب کنید...">
+                                @if(@$model)
+                                    <option value="{{$model->publication->id}}" selected="selected">{{$model->publication->title}}</option>
+                                @endif
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="code">شماره مجله :</label>
@@ -91,10 +95,10 @@
                             <input type="number" class="form-control" value="{{@$model->price}}" name="price" id="price" placeholder="قیمت ..." min="0">
                         </div>
                         <div class="form-group">
-                            <label for="file">فایل کتاب :</label>
-                            <input type="file" name="file" id="file" placeholder="فایل کتاب ..." min="0">
+                            <label for="file">فایل مجله :</label>
+                            <input type="file" name="file" id="file" placeholder="فایل مجله ..." min="0">
                             @if(@$model)
-                            <span id="helpBlock" class="help-block">فایل کتاب <a href="{!! url($model->file) !!}" target="_blank">{!! $model->title !!}</a></span>
+                            <span id="helpBlock" class="help-block">فایل مجله <a href="{!! url($model->file) !!}" target="_blank">{!! $model->title !!}</a></span>
                             @endif
                         </div>
                         <hr>
@@ -125,7 +129,10 @@
 
 @section('scripts')
     @include('admin.objects.scripts_tinymce')
-    @include('admin.objects.scripts_selectize',['tags'=>$tags])
+    @include('admin.objects.scripts_selectize',[
+        'tags'=>$tags,
+        'publications'=>$publications,
+    ])
     @include('admin.objects.scripts_pwtdatepicker')
     <script>
         $(".uploadFile").on("change", function()

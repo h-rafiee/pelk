@@ -32,9 +32,11 @@ class MagazineController extends Controller
     {
         $categories = \App\Category::all();
         $tags = \App\Tag::select(['id','value'])->get();
+        $publications = \App\Publication::select(['id','title'])->get();
         $data=[
             'categories' => $categories,
-            'tags'=>$tags->toJson()
+            'tags'=>$tags->toJson(),
+            'publications'=>$publications->toJson(),
         ];
         return view('admin.magazine_create',$data);
     }
@@ -105,8 +107,11 @@ class MagazineController extends Controller
 
         }
 
-        $publication = \App\Publication::firstOrCreate(['title'=>trim($request->get('publication'))]);
-
+        if(is_numeric($request->get('publication'))){
+            $publication = \App\Publication::find($request->get('publication'));
+        }else{
+            $publication = \App\Publication::firstOrCreate(['title'=>trim($request->get('publication'))]);
+        }
         $magazine = new \App\Magazine();
 
         $magazine->category_id = $request->get('category');
@@ -151,7 +156,7 @@ class MagazineController extends Controller
         $magazine = \App\Magazine::find($id);
         $categories = \App\Category::all();
         $tags = \App\Tag::select(['id','value'])->get();
-
+        $publications = \App\Publication::select(['id','title'])->get();
         if(empty($magazine)){
             abort(404);
             return;
@@ -160,6 +165,7 @@ class MagazineController extends Controller
         $data = [
             'categories'=>$categories,
             'tags'=>$tags->toJson(),
+            'publications'=>$publications->toJson(),
             'model'=>$magazine,
         ];
 
@@ -227,8 +233,11 @@ class MagazineController extends Controller
             }
         }
 
-        $publication = \App\Publication::firstOrCreate(['title'=>trim($request->get('publication'))]);
-
+        if(is_numeric($request->get('publication'))){
+            $publication = \App\Publication::find($request->get('publication'));
+        }else{
+            $publication = \App\Publication::firstOrCreate(['title'=>trim($request->get('publication'))]);
+        }
         $magazine->category_id = $request->get('category');
         $magazine->publication_id = $publication->id;
         $magazine->title = $request->get('title');

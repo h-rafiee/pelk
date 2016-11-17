@@ -32,9 +32,15 @@ class BookController extends Controller
     {
         $categories = \App\Category::all();
         $tags = \App\Tag::select(['id','value'])->get();
+        $publications = \App\Publication::select(['id','title'])->get();
+        $writers = \App\Author::where('type','writer')->select(['id','name'])->get();
+        $translators = \App\Author::where('type','translator')->select(['id','name'])->get();
         $data=[
             'categories' => $categories,
-            'tags'=>$tags->toJson()
+            'tags'=>$tags->toJson(),
+            'publications'=>$publications->toJson(),
+            'writers'=>$writers->toJson(),
+            'translators'=>$translators->toJson()
         ];
         return view('admin.book_create',$data);
     }
@@ -107,7 +113,11 @@ class BookController extends Controller
 
         }
 
-        $publication = \App\Publication::firstOrCreate(['title'=>trim($request->get('publication'))]);
+        if(is_numeric($request->get('publication'))){
+            $publication = \App\Publication::find($request->get('publication'));
+        }else{
+            $publication = \App\Publication::firstOrCreate(['title'=>trim($request->get('publication'))]);
+        }
 
         $book = new \App\Book();
 
@@ -125,24 +135,37 @@ class BookController extends Controller
         $book->active = ($request->has('active'))?1:0;
         $book->save();
         $writers = $request->get('writers');
-        $writers = explode(",",$writers);
         $saveWR = null;
-        $item = null;
         foreach($writers as $key => $value){
-            $item =  \App\Author::firstOrCreate(['name' =>trim($value),'type'=>'writer']);
-            $saveWR[]=$item->id;
+            if(is_numeric($value)){
+                $saveWR[] = $value;
+            }else{
+                $item =  \App\Author::firstOrCreate(['name' =>trim($value),'type'=>'writer']);
+                $saveWR[]=$item->id;
+            }
         }
         $translator = $request->get('translators');
-        $translator = explode(",",$translator);
         $saveTR = null;
-        $item = null;
         foreach($translator as $key => $value){
-            $item =  \App\Author::firstOrCreate(['name' =>trim($value),'type'=>'translator']);
-            $saveTR[]=$item->id;
+            if(is_numeric($value)){
+                $saveTR[] = $value;
+            }else{
+                $item =  \App\Author::firstOrCreate(['name' =>trim($value),'type'=>'translator']);
+                $saveTR[]=$item->id;
+            }
         }
         $tags = $request->get('tags');
-        if(!empty($tags)){
-            $book->tags()->attach($tags);
+        $saveTag = null;
+        foreach($tags as $key => $value){
+            if(is_numeric($value)){
+                $saveTag[] = $value;
+            }else{
+                $item =  \App\Tag::firstOrCreate(['value' =>trim($value)]);
+                $saveTag[]=$item->id;
+            }
+        }
+        if(!empty($saveTag)){
+            $book->tags()->attach($saveTag);
         }
         if(!empty($saveWR)){
             $book->writers()->attach($saveWR);
@@ -176,28 +199,20 @@ class BookController extends Controller
         $book = \App\Book::find($id);
         $categories = \App\Category::all();
         $tags = \App\Tag::select(['id','value'])->get();
-
+        $publications = \App\Publication::select(['id','title'])->get();
+        $writers = \App\Author::where('type','writer')->select(['id','name'])->get();
+        $translators = \App\Author::where('type','translator')->select(['id','name'])->get();
         if(empty($book)){
             abort(404);
             return;
         }
-
-        $writers=null;
-        foreach($book->writers as $wr){
-            $writers[] = $wr->name;
-        }
-
-        $translators=null;
-        foreach($book->translators as $tr){
-            $translators[] = $tr->name;
-        }
-
         $data = [
             'categories'=>$categories,
             'tags'=>$tags->toJson(),
+            'publications'=>$publications->toJson(),
+            'writers'=>$writers->toJson(),
+            'translators'=>$translators->toJson(),
             'model'=>$book,
-            'writers'=>implode(",",$writers),
-            'translators'=>implode(",",$translators),
         ];
 
         return view('admin.book_create',$data);
@@ -269,9 +284,11 @@ class BookController extends Controller
                 $bookURL = $desPath.'/'.$fileName;
             }
         }
-
-        $publication = \App\Publication::firstOrCreate(['title'=>trim($request->get('publication'))]);
-
+        if(is_numeric($request->get('publication'))){
+            $publication = \App\Publication::find($request->get('publication'));
+        }else{
+            $publication = \App\Publication::firstOrCreate(['title'=>trim($request->get('publication'))]);
+        }
         $book->category_id = $request->get('category');
         $book->publication_id = $publication->id;
         $book->title = $request->get('title');
@@ -293,24 +310,37 @@ class BookController extends Controller
         $book->active = ($request->has('active'))?1:0;
         $book->save();
         $writers = $request->get('writers');
-        $writers = explode(",",$writers);
         $saveWR = null;
-        $item = null;
         foreach($writers as $key => $value){
-            $item =  \App\Author::firstOrCreate(['name' =>trim($value),'type'=>'writer']);
-            $saveWR[]=$item->id;
+            if(is_numeric($value)){
+                $saveWR[] = $value;
+            }else{
+                $item =  \App\Author::firstOrCreate(['name' =>trim($value),'type'=>'writer']);
+                $saveWR[]=$item->id;
+            }
         }
         $translator = $request->get('translators');
-        $translator = explode(",",$translator);
         $saveTR = null;
-        $item = null;
         foreach($translator as $key => $value){
-            $item =  \App\Author::firstOrCreate(['name' =>trim($value),'type'=>'translator']);
-            $saveTR[]=$item->id;
+            if(is_numeric($value)){
+                $saveTR[] = $value;
+            }else{
+                $item =  \App\Author::firstOrCreate(['name' =>trim($value),'type'=>'translator']);
+                $saveTR[]=$item->id;
+            }
         }
         $tags = $request->get('tags');
-        if(!empty($tags)){
-            $book->tags()->sync($tags);
+        $saveTag = null;
+        foreach($tags as $key => $value){
+            if(is_numeric($value)){
+                $saveTag[] = $value;
+            }else{
+                $item =  \App\Tag::firstOrCreate(['value' =>trim($value)]);
+                $saveTag[]=$item->id;
+            }
+        }
+        if(!empty($saveTag)){
+            $book->tags()->sync($saveTag);
         }
         if(!empty($saveWR)){
             $book->writers()->sync($saveWR);
