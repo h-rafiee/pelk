@@ -14,6 +14,8 @@ return [
     'category' => 'دسته بندی',
     'books' => 'کتاب ها',
     'book' => 'کتاب',
+    'magazines' => 'مجله ها',
+    'magazine' => 'مجله',
     'writers' => 'نویسندگان',
     'writer' => 'نویسنده',
     'translators' => 'مترجمان',
