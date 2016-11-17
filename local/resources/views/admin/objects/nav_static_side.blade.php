@@ -25,6 +25,9 @@
             <li>
                 <a href="{{url('admin/books')}}"><i class="fa fa-book"></i> {!! trans('admin.books') !!}</a>
             </li>
+            <li>
+                <a href="{{url('admin/magazines')}}"><i class="fa fa-newspaper-o"></i> {!! trans('admin.magazines') !!}</a>
+            </li>
             {{--<li>--}}
                 {{--<a href="forms.html"><i class="fa fa-edit fa-fw"></i> Forms</a>--}}
             {{--</li>--}}
