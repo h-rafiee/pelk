@@ -32,6 +32,9 @@ Route::group(['prefix'=>'admin','namespace'=>'Admin','middleware'=>'admin.auth']
     // Book
     Route::resource('books','BookController');
 
+    // Book
+    Route::resource('magazines','MagazineController');
+
 
 });
 Route::get('/admin-login',['middleware' => 'admin.guest','uses'=>'Admin\AdminController@getLogin']);
