@@ -20,7 +20,7 @@ Route::get('/user', function (Request $request) {
 Route::post('getToken',function(Request $request){
     $http = new GuzzleHttp\Client;
 
-    $response = $http->post('http://localhost/pelk/oauth/token', [
+    $response = $http->post(url('oauth/token'), [
         'form_params' => [
             'grant_type' => 'password',
             'client_id' => $request->get('client_id'),

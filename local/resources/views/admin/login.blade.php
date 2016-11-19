@@ -9,6 +9,7 @@
 
     <title>@yield('title',trans('admin.header_title'))</title>
     @include('admin.objects.styles_core_libs')
+    @include('admin.objects.fav_icon')
 </head>
 
 <body>
