@@ -136,32 +136,38 @@ class BookController extends Controller
         $book->save();
         $writers = $request->get('writers');
         $saveWR = null;
-        foreach($writers as $key => $value){
-            if(is_numeric($value)){
-                $saveWR[] = $value;
-            }else{
-                $item =  \App\Author::firstOrCreate(['name' =>trim($value),'type'=>'writer']);
-                $saveWR[]=$item->id;
+        if(!empty($writers)){
+            foreach($writers as $key => $value){
+                if(is_numeric($value)){
+                    $saveWR[] = $value;
+                }else{
+                    $item =  \App\Author::firstOrCreate(['name' =>trim($value),'type'=>'writer']);
+                    $saveWR[]=$item->id;
+                }
             }
         }
         $translator = $request->get('translators');
         $saveTR = null;
-        foreach($translator as $key => $value){
-            if(is_numeric($value)){
-                $saveTR[] = $value;
-            }else{
-                $item =  \App\Author::firstOrCreate(['name' =>trim($value),'type'=>'translator']);
-                $saveTR[]=$item->id;
+        if(!empty($translator)){
+            foreach($translator as $key => $value){
+                if(is_numeric($value)){
+                    $saveTR[] = $value;
+                }else{
+                    $item =  \App\Author::firstOrCreate(['name' =>trim($value),'type'=>'translator']);
+                    $saveTR[]=$item->id;
+                }
             }
         }
         $tags = $request->get('tags');
         $saveTag = null;
-        foreach($tags as $key => $value){
-            if(is_numeric($value)){
-                $saveTag[] = $value;
-            }else{
-                $item =  \App\Tag::firstOrCreate(['value' =>trim($value)]);
-                $saveTag[]=$item->id;
+        if(!empty($tags)){
+            foreach($tags as $key => $value){
+                if(is_numeric($value)){
+                    $saveTag[] = $value;
+                }else{
+                    $item =  \App\Tag::firstOrCreate(['value' =>trim($value)]);
+                    $saveTag[]=$item->id;
+                }
             }
         }
         if(!empty($saveTag)){
@@ -311,32 +317,38 @@ class BookController extends Controller
         $book->save();
         $writers = $request->get('writers');
         $saveWR = null;
-        foreach($writers as $key => $value){
-            if(is_numeric($value)){
-                $saveWR[] = $value;
-            }else{
-                $item =  \App\Author::firstOrCreate(['name' =>trim($value),'type'=>'writer']);
-                $saveWR[]=$item->id;
+        if(!empty($writers)){
+            foreach($writers as $key => $value){
+                if(is_numeric($value)){
+                    $saveWR[] = $value;
+                }else{
+                    $item =  \App\Author::firstOrCreate(['name' =>trim($value),'type'=>'writer']);
+                    $saveWR[]=$item->id;
+                }
             }
         }
         $translator = $request->get('translators');
         $saveTR = null;
-        foreach($translator as $key => $value){
-            if(is_numeric($value)){
-                $saveTR[] = $value;
-            }else{
-                $item =  \App\Author::firstOrCreate(['name' =>trim($value),'type'=>'translator']);
-                $saveTR[]=$item->id;
+        if(!empty($translator)){
+            foreach($translator as $key => $value){
+                if(is_numeric($value)){
+                    $saveTR[] = $value;
+                }else{
+                    $item =  \App\Author::firstOrCreate(['name' =>trim($value),'type'=>'translator']);
+                    $saveTR[]=$item->id;
+                }
             }
         }
         $tags = $request->get('tags');
         $saveTag = null;
-        foreach($tags as $key => $value){
-            if(is_numeric($value)){
-                $saveTag[] = $value;
-            }else{
-                $item =  \App\Tag::firstOrCreate(['value' =>trim($value)]);
-                $saveTag[]=$item->id;
+        if(!empty($tags)){
+            foreach($tags as $key => $value){
+                if(is_numeric($value)){
+                    $saveTag[] = $value;
+                }else{
+                    $item =  \App\Tag::firstOrCreate(['value' =>trim($value)]);
+                    $saveTag[]=$item->id;
+                }
             }
         }
         if(!empty($saveTag)){

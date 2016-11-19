@@ -128,8 +128,20 @@ class MagazineController extends Controller
         $magazine->active = ($request->has('active'))?1:0;
         $magazine->save();
         $tags = $request->get('tags');
+        $tags = $request->get('tags');
+        $saveTag = null;
         if(!empty($tags)){
-            $magazine->tags()->attach($tags);
+            foreach($tags as $key => $value){
+                if(is_numeric($value)){
+                    $saveTag[] = $value;
+                }else{
+                    $item =  \App\Tag::firstOrCreate(['value' =>trim($value)]);
+                    $saveTag[]=$item->id;
+                }
+            }
+        }
+        if(!empty($saveTag)){
+            $magazine->tags()->attach($saveTag);
         }
         return redirect('admin/magazines')->with('success', 'مجله جدید اضافه شد.');
     }
@@ -259,7 +271,18 @@ class MagazineController extends Controller
         $magazine->active = ($request->has('active'))?1:0;
         $magazine->save();
         $tags = $request->get('tags');
+        $saveTag = null;
         if(!empty($tags)){
+            foreach($tags as $key => $value){
+                if(is_numeric($value)){
+                    $saveTag[] = $value;
+                }else{
+                    $item =  \App\Tag::firstOrCreate(['value' =>trim($value)]);
+                    $saveTag[]=$item->id;
+                }
+            }
+        }
+        if(!empty($saveTag)){
             $magazine->tags()->sync($tags);
         }
 
