@@ -65,7 +65,7 @@ class MagazineController extends Controller
             'description'=>'required',
             'text'=>'required',
             'file'=>'required',
-            'image' =>   'mimes:jpg,jpeg,bmp,png',
+            'image' =>   'required|mimes:jpg,jpeg,bmp,png',
         ]);
 
         $fileURL = null;
@@ -84,18 +84,20 @@ class MagazineController extends Controller
             }
         }
 
+        $file = $request->get('file');
         $magURL = null;
-        if ($request->hasFile('file')) {
+        if (!empty($file)) {
+            $extension = last(explode(".",$file));
             $desPath = "uploads/magazines/".$request->get('slug').'/'.date("Ymd");
             if(!is_dir($desPath))
                 mkdir($desPath,0775,true);
             $rand = $this->generateRandomString(30);
-            $fileName = $rand.".".$request->file('file')->getClientOriginalExtension();
+            $fileName = $rand.".".$extension;
             while(file_exists($desPath.'/'.$fileName) == true){
                 $rand = $this->generateRandomString(30);
-                $fileName = $rand.".".$request->file('file')->getClientOriginalExtension();
+                $fileName = $rand.".".$extension;
             }
-            if($request->file('file')->move($desPath, $fileName)){
+            if(rename($file,$desPath.'/'.$fileName)){
                 $magURL = $desPath.'/'.$fileName;
             }
         }
@@ -229,18 +231,21 @@ class MagazineController extends Controller
                 $fileURL = $desPath.'/'.$fileName;
             }
         }
+
+        $file = $request->get('file');
         $magURL = null;
-        if ($request->hasFile('file')) {
-            $desPath = "uploads/magazines/".$magazine->slug.'/'.date("Ymd");
+        if (!empty($file)) {
+            $extension = last(explode(".",$file));
+            $desPath = "uploads/magazines/".$request->get('slug').'/'.date("Ymd");
             if(!is_dir($desPath))
                 mkdir($desPath,0775,true);
             $rand = $this->generateRandomString(30);
-            $fileName = $rand.".".$request->file('file')->getClientOriginalExtension();
+            $fileName = $rand.".".$extension;
             while(file_exists($desPath.'/'.$fileName) == true){
                 $rand = $this->generateRandomString(30);
-                $fileName = $rand.".".$request->file('file')->getClientOriginalExtension();
+                $fileName = $rand.".".$extension;
             }
-            if($request->file('file')->move($desPath, $fileName)){
+            if(rename($file,$desPath.'/'.$fileName)){
                 $magURL = $desPath.'/'.$fileName;
             }
         }

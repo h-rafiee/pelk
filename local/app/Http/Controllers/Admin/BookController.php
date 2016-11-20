@@ -71,7 +71,7 @@ class BookController extends Controller
             'description'=>'required',
             'text'=>'required',
             'file'=>'required',
-            'image' =>   'mimes:jpg,jpeg,bmp,png',
+            'image' =>   'required|mimes:jpg,jpeg,bmp,png',
         ]);
 
         $fileURL = null;
@@ -90,18 +90,21 @@ class BookController extends Controller
             }
         }
 
+        $file = $request->get('file');
+
         $bookURL = null;
-        if ($request->hasFile('file')) {
+        if (!empty($file)) {
+            $extension = last(explode(".",$file));
             $desPath = "uploads/books/".$request->get('isbn').'/'.date("Ymd");
             if(!is_dir($desPath))
                 mkdir($desPath,0775,true);
             $rand = $this->generateRandomString(30);
-            $fileName = $rand.".".$request->file('file')->getClientOriginalExtension();
+            $fileName = $rand.".".$extension;
             while(file_exists($desPath.'/'.$fileName) == true){
                 $rand = $this->generateRandomString(30);
-                $fileName = $rand.".".$request->file('file')->getClientOriginalExtension();
+                $fileName = $rand.".".$extension;
             }
-            if($request->file('file')->move($desPath, $fileName)){
+            if(rename($file,$desPath.'/'.$fileName)){
                 $bookURL = $desPath.'/'.$fileName;
             }
         }
@@ -275,18 +278,21 @@ class BookController extends Controller
                 $fileURL = $desPath.'/'.$fileName;
             }
         }
+        $file = $request->get('file');
+
         $bookURL = null;
-        if ($request->hasFile('file')) {
+        if (!empty($file)) {
+            $extension = last(explode(".",$file));
             $desPath = "uploads/books/".$request->get('isbn').'/'.date("Ymd");
             if(!is_dir($desPath))
                 mkdir($desPath,0775,true);
             $rand = $this->generateRandomString(30);
-            $fileName = $rand.".".$request->file('file')->getClientOriginalExtension();
+            $fileName = $rand.".".$extension;
             while(file_exists($desPath.'/'.$fileName) == true){
                 $rand = $this->generateRandomString(30);
-                $fileName = $rand.".".$request->file('file')->getClientOriginalExtension();
+                $fileName = $rand.".".$extension;
             }
-            if($request->file('file')->move($desPath, $fileName)){
+            if(rename($file,$desPath.'/'.$fileName)){
                 $bookURL = $desPath.'/'.$fileName;
             }
         }
@@ -386,5 +392,9 @@ class BookController extends Controller
 
     private function generateRandomString($length = 10) {
         return substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, $length);
+    }
+
+    public function dosome(Request $request){
+        dd($request->all());
     }
 }
