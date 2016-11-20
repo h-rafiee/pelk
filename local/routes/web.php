@@ -11,6 +11,7 @@
 |
 */
 
+
 Route::group(['prefix'=>'admin','namespace'=>'Admin','middleware'=>'admin.auth'],function(){
     Route::get('/',function(){
         return view('admin.index');
@@ -35,6 +36,9 @@ Route::group(['prefix'=>'admin','namespace'=>'Admin','middleware'=>'admin.auth']
     // Book
     Route::resource('magazines','MagazineController');
 
+    Route::group(['middleware' => 'ajax','prefix'=>'ajax'],function(){
+       Route::post('upload','AjaxController@upload');
+    });
 
 });
 Route::get('/admin-login',['middleware' => 'admin.guest','uses'=>'Admin\AdminController@getLogin']);
