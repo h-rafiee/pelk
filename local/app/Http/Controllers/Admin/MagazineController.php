@@ -120,7 +120,7 @@ class MagazineController extends Controller
         $magazine->publication_id = $publication->id;
         $magazine->slug = $request->get('slug');
         $magazine->title = $request->get('title');
-        $magazine->price = $request->get('price');
+        $magazine->price = (empty($request->get('price')))?0:$request->get('price');
         $magazine->file = $magURL;
         $magazine->description = $request->get('description');
         $magazine->text = $request->get('text');
@@ -258,7 +258,7 @@ class MagazineController extends Controller
         $magazine->category_id = $request->get('category');
         $magazine->publication_id = $publication->id;
         $magazine->title = $request->get('title');
-        $magazine->price = $request->get('price');
+        $magazine->price = (empty($request->get('price')))?0:$request->get('price');
         if(!empty($magURL)){
             if(file_exists(public_path($magazine->file)))
                 unlink(public_path($magazine->file));
