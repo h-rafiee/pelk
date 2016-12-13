@@ -19,4 +19,12 @@ class Author extends Model
     public function tbooks(){
         return $this->belongsToMany('App\Book','_translator_book','author_id');
     }
+
+    public function wbooks_four(){
+        return $this->belongsToMany('App\Book','_writer_book','author_id')->orderBy('created_at','DESC')->take(4);
+    }
+
+    public function tbooks_four(){
+        return $this->belongsToMany('App\Book','_translator_book','author_id')->orderBy('created_at','DESC')->take(4);
+    }
 }

@@ -109,6 +109,27 @@ class BookController extends Controller
             }
         }
 
+
+
+        $file_demo = $request->get('file_demo');
+
+        $bookDemoURL = null;
+        if (!empty($file_demo)) {
+            $extension = last(explode(".",$file_demo));
+            $desPath = "uploads/books/".$request->get('isbn').'/'.date("Ymd");
+            if(!is_dir($desPath))
+                mkdir($desPath,0775,true);
+            $rand = $this->generateRandomString(30);
+            $fileName = $rand."-DEMO.".$extension;
+            while(file_exists($desPath.'/'.$fileName) == true){
+                $rand = $this->generateRandomString(30);
+                $fileName = $rand."-DEMO.".$extension;
+            }
+            if(rename($file_demo,$desPath.'/'.$fileName)){
+                $bookDemoURL = $desPath.'/'.$fileName;
+            }
+        }
+
         while(\App\Book::where('slug',$request->get('slug'))->first()){
             $input = $request->all();
             $input['slug'] = "Book-".substr(str_shuffle(last(explode("-",$input['isbn'])).time()),0,10);
@@ -130,6 +151,7 @@ class BookController extends Controller
         $book->title = $request->get('title');
         $book->price = (empty($request->get('price')))?0:$request->get('price');
         $book->file = $bookURL;
+        $book->file_demo = $bookDemoURL;
         $book->description = $request->get('description');
         $book->text = $request->get('text');
         $book->isbn = $request->get('isbn');
@@ -296,6 +318,26 @@ class BookController extends Controller
                 $bookURL = $desPath.'/'.$fileName;
             }
         }
+
+        $file_demo = $request->get('file_demo');
+
+        $bookDemoURL = null;
+        if (!empty($file_demo)) {
+            $extension = last(explode(".",$file_demo));
+            $desPath = "uploads/books/".$request->get('isbn').'/'.date("Ymd");
+            if(!is_dir($desPath))
+                mkdir($desPath,0775,true);
+            $rand = $this->generateRandomString(30);
+            $fileName = $rand."-DEMO.".$extension;
+            while(file_exists($desPath.'/'.$fileName) == true){
+                $rand = $this->generateRandomString(30);
+                $fileName = $rand."-DEMO.".$extension;
+            }
+            if(rename($file_demo,$desPath.'/'.$fileName)){
+                $bookDemoURL = $desPath.'/'.$fileName;
+            }
+        }
+
         if(is_numeric($request->get('publication'))){
             $publication = \App\Publication::find($request->get('publication'));
         }else{
@@ -309,6 +351,11 @@ class BookController extends Controller
             if(file_exists(public_path($book->file)))
                 unlink(public_path($book->file));
             $book->file = $bookURL;
+        }
+        if(!empty($bookDemoURL)){
+            if(file_exists(public_path($book->file_demo)))
+                unlink(public_path($book->file_demo));
+            $book->file_demo = $bookDemoURL;
         }
         $book->description = $request->get('description');
         $book->text = $request->get('text');
@@ -359,12 +406,18 @@ class BookController extends Controller
         }
         if(!empty($saveTag)){
             $book->tags()->sync($saveTag);
+        }else{
+            $book->tags()->detach();
         }
         if(!empty($saveWR)){
             $book->writers()->sync($saveWR);
+        }else{
+            $book->writers()->detach();
         }
         if(!empty($saveTR)){
             $book->translators()->sync($saveTR);
+        }else{
+            $book->translators()->detach();
         }
 
         return redirect('admin/books')->with('success', 'کتاب ویرایش شد.');

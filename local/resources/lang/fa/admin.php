@@ -24,6 +24,10 @@ return [
     'publication' => 'ناشر',
     'authors' => 'مولفان',
     'author' => 'مولف',
+    'sliders' => 'اسلایدرها',
+    'slider' => 'اسلایدر',
+    'home-template'=>'قالب خانه',
+    'web'=>'وب سایت',
     'confirm_delete' => 'آیا از حذف [ :val ] مطمئن هستید ؟',
     'non_item_found' => 'موردی یافت نشد.',
 

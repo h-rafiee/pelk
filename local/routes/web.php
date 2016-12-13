@@ -30,14 +30,28 @@ Route::group(['prefix'=>'admin','namespace'=>'Admin','middleware'=>'admin.auth']
     // Categories
     Route::resource('categories','CategoryController');
 
-    // Book
+    // Books
     Route::resource('books','BookController');
 
-    // Book
+    // Magazines
     Route::resource('magazines','MagazineController');
 
+    // Promotes
+    Route::resource('sliders','PromoteController');
+
+
+    // Web Template
+    Route::get('web/template','AdminController@getWebTemplate');
+    Route::post('web/template','AdminController@postWebTemplate');
+
+    // Ajax
     Route::group(['middleware' => 'ajax','prefix'=>'ajax'],function(){
-       Route::post('upload','AjaxController@upload');
+        Route::post('upload','AjaxController@upload');
+        Route::get('categories','AjaxController@categories');
+        Route::get('tags','AjaxController@tags');
+        Route::get('publications','AjaxController@publications');
+        Route::get('writers','AjaxController@writers');
+        Route::get('translators','AjaxController@translators');
     });
 
 });
@@ -45,6 +59,13 @@ Route::get('/admin-login',['middleware' => 'admin.guest','uses'=>'Admin\AdminCon
 Route::post('/admin-login',['middleware' => 'admin.guest','uses'=>'Admin\AdminController@postLogin']);
 
 
-Route::get('/', function () {
-    return view('welcome');
+
+Route::group(['namespace'=>'Client'],function(){
+    Route::get('/','ClientController@getHome');
+    Route::get('intro','ClientController@getIntro');
+    Route::get('categories','ClientController@getCategories');
+    Route::get('login','ClientController@getLogin');
+    Route::get('profile','ClientController@getProfile');
+
+    Route::get('book','ClientController@getBook');
 });

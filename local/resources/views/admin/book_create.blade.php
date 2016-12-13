@@ -1,6 +1,7 @@
 @extends('admin.master')
 @section('style')
     <link rel="stylesheet" href="{{asset('assets/admin/vendor/selectize/css/selectize.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/admin/vendor/selectize/css/selectize.default.css')}}">
     <link rel="stylesheet" href="{{asset('assets/admin/vendor/pwtdatepicker/css/persian-datepicker-0.4.5.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/admin/vendor/jquery-alertable/css/jquery.alertable.css')}}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -52,11 +53,19 @@
                                         <span class="text-file">
                                             فایل کتاب را انتخاب کنید
                                         </span>
-                                        <input type="text" id="file" name="file" class="input-hidden" required>
+                                        @if(@$model)
+                                            <input type="text" id="file" name="file" class="input-hidden" >
+                                        @else
+                                            <input type="text" id="file" name="file" class="input-hidden" required>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="panel-footer hidden" id="progress_position">
-                                    <div class="progress" style="margin-bottom: 0px;height: 5px;">
+                                    <div class="message hidden">
+                                        <i class="fa fa-check fa-lg text-success"></i>
+                                        فایل آپلود شد
+                                    </div>
+                                    <div class="progress hidden" style="margin-bottom: 0px;height: 5px;">
                                         <div id="progressbar" class="hid progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%">
                                             <span class="sr-only">45% Complete</span>
                                         </div>
@@ -76,6 +85,33 @@
                                         @endforeach
                                     @endif
                                 </select>
+                            </div>
+                            <div class="panel panel-default">
+                                @if(@$model)
+                                    <div class="panel-heading">
+                                        نمونه فایل کتاب <a href="{!! url($model->file_demo) !!}" target="_blank">{!! $model->title !!}</a>
+                                    </div>
+                                @endif
+                                <div class="panel-body clickable" data-click="fileDemoToUpload">
+                                    <div class="text-muted text-center">
+                                        <i class="fa fa-file-o"></i>
+                                        <span class="text-file">
+                                            نمونه فایل کتاب را انتخاب کنید
+                                        </span>
+                                        <input type="text" id="file_demo" name="file_demo" class="input-hidden" >
+                                    </div>
+                                </div>
+                                <div class="panel-footer hidden" id="progress_position_demo">
+                                    <div class="message hidden">
+                                        <i class="fa fa-check fa-lg text-success"></i>
+                                        فایل آپلود شد
+                                    </div>
+                                    <div class="progress hidden" style="margin-bottom: 0px;height: 5px;">
+                                        <div id="progressbar_demo" class="hid progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%">
+                                            <span class="sr-only">45% Complete</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <hr>
                             <div class="form-group">
@@ -140,8 +176,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="category">دسته بندی :</label>
-                                <select class="form-control" name="category" id="category"  required>
-                                    <option {{(@$model)?'':'selected="selected"'}} disabled>لطفا دسته مورد نظر را انتخاب کنید.</option>
+                                <select class="mselectize" name="category" placeholder="دسته بندی را انتخاب کنید..." id="category"  required>
+                                    <option></option>
                                     @foreach($categories as $category)
                                         @if(@$model->category_id == $category->id)
                                             <option value="{{$category->id}}" selected="selected">{{$category->title}}</option>
@@ -174,6 +210,7 @@
         </div>
     </div>
     <input type="file" id="fileToUpload" class="hidden">
+    <input type="file" id="fileDemoToUpload" class="hidden">
 @endsection
 
 @section('scripts')

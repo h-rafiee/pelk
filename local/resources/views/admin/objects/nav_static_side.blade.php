@@ -28,6 +28,18 @@
             <li>
                 <a href="{{url('admin/magazines')}}"><i class="fa fa-newspaper-o"></i> {!! trans('admin.magazines') !!}</a>
             </li>
+            <li>
+                <a href="{{url('admin/sliders')}}"><i class="fa fa-rocket"></i> {!! trans('admin.sliders') !!}</a>
+            </li>
+            <li>
+                <a href="#"><i class="fa fa-laptop fa-fw"></i> {!! trans('admin.web') !!}<span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a href="{{url('admin/web/template')}}">{!! trans('admin.home-template') !!}</a>
+                    </li>
+                </ul>
+                <!-- /.nav-second-level -->
+            </li>
             {{--<li>--}}
                 {{--<a href="forms.html"><i class="fa fa-edit fa-fw"></i> Forms</a>--}}
             {{--</li>--}}

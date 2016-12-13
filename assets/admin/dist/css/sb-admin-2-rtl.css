@@ -52,3 +52,25 @@ input.input-hidden{
 .clickable{
     cursor: pointer;
 }
+
+.item-template{
+    position: relative;
+    padding: 20px 20px;
+    border: 1px solid #eee;
+    border-radius: 3px;
+    box-shadow: 1px 1px 3px #eee;
+    margin-bottom: 20px;
+}
+
+.item-template .close {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+}
+
+.item-template .drag-handle{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: move;
+}

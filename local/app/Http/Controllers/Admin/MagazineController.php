@@ -102,6 +102,24 @@ class MagazineController extends Controller
             }
         }
 
+        $file_demo = $request->get('file_demo');
+        $magDemoURL = null;
+        if (!empty($file_demo)) {
+            $extension = last(explode(".",$file));
+            $desPath = "uploads/magazines/".$request->get('slug').'/'.date("Ymd");
+            if(!is_dir($desPath))
+                mkdir($desPath,0775,true);
+            $rand = $this->generateRandomString(30);
+            $fileName = $rand.".".$extension;
+            while(file_exists($desPath.'/'.$fileName) == true){
+                $rand = $this->generateRandomString(30);
+                $fileName = $rand."-DEMO.".$extension;
+            }
+            if(rename($file_demo,$desPath.'/'.$fileName)){
+                $magDemoURL = $desPath.'/'.$fileName;
+            }
+        }
+
         while(\App\Magazine::where('slug',$request->get('slug'))->first()){
             $input = $request->all();
             $input['slug'] = "Magazine-".substr(str_shuffle(rand(100000,999999).time()),0,10);
@@ -122,6 +140,7 @@ class MagazineController extends Controller
         $magazine->title = $request->get('title');
         $magazine->price = (empty($request->get('price')))?0:$request->get('price');
         $magazine->file = $magURL;
+        $magazine->file_demo = $magDemoURL;
         $magazine->description = $request->get('description');
         $magazine->text = $request->get('text');
         $magazine->code = $request->get('code');
@@ -250,6 +269,24 @@ class MagazineController extends Controller
             }
         }
 
+        $file_demo = $request->get('file_demo');
+        $magDemoURL = null;
+        if (!empty($file_demo)) {
+            $extension = last(explode(".",$file));
+            $desPath = "uploads/magazines/".$request->get('slug').'/'.date("Ymd");
+            if(!is_dir($desPath))
+                mkdir($desPath,0775,true);
+            $rand = $this->generateRandomString(30);
+            $fileName = $rand.".".$extension;
+            while(file_exists($desPath.'/'.$fileName) == true){
+                $rand = $this->generateRandomString(30);
+                $fileName = $rand."-DEMO.".$extension;
+            }
+            if(rename($file_demo,$desPath.'/'.$fileName)){
+                $magDemoURL = $desPath.'/'.$fileName;
+            }
+        }
+
         if(is_numeric($request->get('publication'))){
             $publication = \App\Publication::find($request->get('publication'));
         }else{
@@ -264,6 +301,13 @@ class MagazineController extends Controller
                 unlink(public_path($magazine->file));
             $magazine->file = $magURL;
         }
+
+        if(!empty($magDemoURL)){
+            if(file_exists(public_path($magazine->file_demo)))
+                unlink(public_path($magazine->file_demo));
+            $magazine->file_demo = $magDemoURL;
+        }
+
         $magazine->description = $request->get('description');
         $magazine->text = $request->get('text');
         $magazine->code = $request->get('code');
@@ -289,6 +333,8 @@ class MagazineController extends Controller
         }
         if(!empty($saveTag)){
             $magazine->tags()->sync($tags);
+        }else{
+            $magazine->tags()->detach();
         }
 
         return redirect('admin/magazines')->with('success', 'مجله ویرایش شد.');

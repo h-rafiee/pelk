@@ -31,4 +31,49 @@ class AjaxController extends Controller
         echo $url;
         return;
     }
+
+    public function categories(){
+        $categories = \App\Category::all();
+        return view('admin.objects.ajax_select_one',[
+            'model'=>$categories,
+            'type'=>'categories',
+            'label'=>'دسته بندی'
+        ]);
+    }
+
+    public function tags(){
+        $tags = \App\Tag::all();
+        return view('admin.objects.ajax_select_one',[
+            'model'=>$tags,
+            'type'=>'tags',
+            'label'=>'تگ'
+        ]);
+    }
+
+    public function publications(){
+        $publications = \App\Publication::all();
+        return view('admin.objects.ajax_select_one',[
+            'model'=>$publications,
+            'type'=>'publications',
+            'label'=>'ناشر'
+        ]);
+    }
+
+    public function writers(){
+        $writers = \App\Author::where('type','writer')->get();
+        return view('admin.objects.ajax_select_one',[
+            'model'=>$writers,
+            'type'=>'writers',
+            'label'=>'نویسنده'
+        ]);
+    }
+
+    public function translators(){
+        $translators = \App\Author::where('type','translator')->get();
+        return view('admin.objects.ajax_select_one',[
+            'model'=>$translators,
+            'type'=>'translators',
+            'label'=>'مترجم'
+        ]);
+    }
 }
