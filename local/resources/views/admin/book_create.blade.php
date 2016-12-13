@@ -87,7 +87,7 @@
                                 </select>
                             </div>
                             <div class="panel panel-default">
-                                @if(@$model)
+                                @if(@$model->file_demo)
                                     <div class="panel-heading">
                                         نمونه فایل کتاب <a href="{!! url($model->file_demo) !!}" target="_blank">{!! $model->title !!}</a>
                                     </div>
