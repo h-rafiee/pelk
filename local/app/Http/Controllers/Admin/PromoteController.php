@@ -63,7 +63,7 @@ class PromoteController extends Controller
             }
         }
         if(empty($fileURL))
-            return redirect('admin/sliders')->withError(['image_upload'=>'خطا در آپلود تصویر دوباره تلاش کنید.']);
+            return redirect('admin/web/sliders')->withError(['image_upload'=>'خطا در آپلود تصویر دوباره تلاش کنید.']);
 
         $slider = new \App\Promote();
         $slider->title = $request->input('title');
@@ -72,7 +72,7 @@ class PromoteController extends Controller
         $slider->link = (empty($request->input('link')))? null  : $request->input('link') ;
         $slider->position = (empty($request->input('position')))? 0  : $request->input('position') ;
         $slider->save();
-        return redirect('admin/sliders')->with('success', 'اسلایدر جدید اضافه شد.');
+        return redirect('admin/web/sliders')->with('success', 'اسلایدر جدید اضافه شد.');
 
     }
 
@@ -152,7 +152,7 @@ class PromoteController extends Controller
         $slider->link = (empty($request->input('link')))? null  : $request->input('link') ;
         $slider->position = (empty($request->input('position')))? 0  : $request->input('position') ;
         $slider->save();
-        return redirect('admin/sliders')->with('success', 'اسلایدر جدید اضافه شد.');
+        return redirect('admin/web/sliders')->with('success', 'اسلایدر جدید اضافه شد.');
 
     }
 

@@ -32,47 +32,52 @@ class AjaxController extends Controller
         return;
     }
 
-    public function categories(){
+    public function categories($banner=null){
         $categories = \App\Category::all();
         return view('admin.objects.ajax_select_one',[
             'model'=>$categories,
             'type'=>'categories',
+            'banner'=>$banner,
             'label'=>'دسته بندی'
         ]);
     }
 
-    public function tags(){
+    public function tags($banner=null){
         $tags = \App\Tag::all();
         return view('admin.objects.ajax_select_one',[
             'model'=>$tags,
             'type'=>'tags',
+            'banner'=>$banner,
             'label'=>'تگ'
         ]);
     }
 
-    public function publications(){
+    public function publications($banner=null){
         $publications = \App\Publication::all();
         return view('admin.objects.ajax_select_one',[
             'model'=>$publications,
             'type'=>'publications',
+            'banner'=>$banner,
             'label'=>'ناشر'
         ]);
     }
 
-    public function writers(){
+    public function writers($banner=null){
         $writers = \App\Author::where('type','writer')->get();
         return view('admin.objects.ajax_select_one',[
             'model'=>$writers,
             'type'=>'writers',
+            'banner'=>$banner,
             'label'=>'نویسنده'
         ]);
     }
 
-    public function translators(){
+    public function translators($banner=null){
         $translators = \App\Author::where('type','translator')->get();
         return view('admin.objects.ajax_select_one',[
             'model'=>$translators,
             'type'=>'translators',
+            'banner'=>$banner,
             'label'=>'مترجم'
         ]);
     }

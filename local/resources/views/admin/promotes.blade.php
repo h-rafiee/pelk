@@ -9,7 +9,7 @@
         <div class="col-lg-12">
             <div class="page-header">
                 <h1>{!! trans('admin.sliders') !!}</h1>
-                <a href="sliders/create"><span
+                <a href="web/sliders/create"><span
                             class="fa fa-file-o"></span> {!! trans('global.create_new',['name'=>trans('admin.slider')]) !!}
                 </a>
             </div>
@@ -44,12 +44,12 @@
                             <td>{{$i++}}</td>
                             <td>{{$value->title}}</td>
                             <td>{{date("M Y j",strtotime($value->created_at))}}</td>
-                            <td><a href="{{url("admin/sliders/{$value->id}/edit")}}" class="text-warning"><span
+                            <td><a href="{{url("admin/web/sliders/{$value->id}/edit")}}" class="text-warning"><span
                                             class="fa fa-pencil"></span> {!! trans('global.edit') !!}</a></td>
                             <td><a class="remove confirm text-danger" href="javascript.void(0)"
                                    data-remove="rowID{{$value->id}}" data-token="{{csrf_token()}}"
                                    data-title="{!! trans('admin.confirm_delete',['val'=>$value->title]) !!}"
-                                   data-link="{{url("admin/sliders/{$value->id}")}}"><span
+                                   data-link="{{url("admin/web/sliders/{$value->id}")}}"><span
                                             class="fa fa-trash"></span> {!! trans('global.delete') !!}</a></td>
                         </tr>
                     @endforeach

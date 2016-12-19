@@ -29,9 +29,9 @@
                 {{--END MESSAGES--}}
 
                 @if(empty($model))
-                <form action="{{url('admin/sliders')}}" method="post" class="form" enctype="multipart/form-data">
+                <form action="{{url('admin/web/sliders')}}" method="post" class="form" enctype="multipart/form-data">
                 @else
-                <form action="{{url('admin/sliders/'.$model->id)}}" method="post" class="form" enctype="multipart/form-data">
+                <form action="{{url('admin/web/sliders/'.$model->id)}}" method="post" class="form" enctype="multipart/form-data">
                 {{ method_field('PUT') }}
                 @endif
                 {{csrf_field()}}
