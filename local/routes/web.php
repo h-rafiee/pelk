@@ -37,21 +37,29 @@ Route::group(['prefix'=>'admin','namespace'=>'Admin','middleware'=>'admin.auth']
     Route::resource('magazines','MagazineController');
 
     // Promotes
-    Route::resource('sliders','PromoteController');
+    Route::resource('web/sliders','PromoteController');
 
 
     // Web Template
     Route::get('web/template','AdminController@getWebTemplate');
     Route::post('web/template','AdminController@postWebTemplate');
 
+    // Mob Template
+    Route::get('mobile/sliders','AdminController@getMobileSliders');
+    Route::post('mobile/sliders','AdminController@postMobileSliders');
+    Route::get('mobile/template','AdminController@getMobileTemplate');
+    Route::post('mobile/template','AdminController@postMobileTemplate');
+
     // Ajax
     Route::group(['middleware' => 'ajax','prefix'=>'ajax'],function(){
         Route::post('upload','AjaxController@upload');
-        Route::get('categories','AjaxController@categories');
-        Route::get('tags','AjaxController@tags');
-        Route::get('publications','AjaxController@publications');
-        Route::get('writers','AjaxController@writers');
-        Route::get('translators','AjaxController@translators');
+        Route::get('categories/{banner?}','AjaxController@categories');
+        Route::get('tags/{banner?}','AjaxController@tags');
+        Route::get('publications/{banner?}','AjaxController@publications');
+        Route::get('writers/{banner?}','AjaxController@writers');
+        Route::get('translators/{banner?}','AjaxController@translators');
+        Route::get('books/{banner?}','AjaxController@writers');
+        Route::get('magazines/{banner?}','AjaxController@translators');
     });
 
 });
@@ -66,6 +74,23 @@ Route::group(['namespace'=>'Client'],function(){
     Route::get('categories','ClientController@getCategories');
     Route::get('login','ClientController@getLogin');
     Route::get('profile','ClientController@getProfile');
+    Route::get('search','ClientController@getSearch');
 
-    Route::get('book','ClientController@getBook');
+    Route::get('books/categories/{title}','BookController@booksByCategory');
+    Route::get('books/tags/{title}','BookController@booksByTag');
+    Route::get('books/publications/{title}','BookController@booksByPublication');
+    Route::get('books/writers/{title}','BookController@booksByWriter');
+    Route::get('books/translators/{title}','BookController@booksByTranslator');
+
+    Route::get('magazines/categories/{title}','MagazineController@magazinesByCategory');
+    Route::get('magazines/tags/{title}','MagazineController@magazinesByTag');
+    Route::get('magazines/publications/{title}','MagazineController@magazinesByPublication');
+
+    Route::get('book/{slug}/{title?}','BookController@book');
+    Route::get('magazine/{slug}/{title?}','MagazineController@magazine');
+
+    Route::group(['middleware' => 'ajax'],function(){
+        Route::post('search/books','AjaxController@searchBooks');
+        Route::post('search/magazines','AjaxController@searchMagazines');
+    });
 });

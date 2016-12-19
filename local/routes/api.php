@@ -45,6 +45,22 @@ Route::post('authentication',function(Request $request){
     return json_decode((string) $response->getBody(), true);
 });
 
+Route::post('refresh_token',function(Request $request){
+    $http = new GuzzleHttp\Client;
+
+    $response = $http->post(url('oauth/token'), [
+        'form_params' => [
+            'grant_type' => 'refresh_token',
+            'refresh_token' => $request->get('refresh_token'),
+            'client_id' => $request->get('client_id'),
+            'client_secret' => $request->get('client_secret'),
+            'scope' => '',
+        ],
+    ]);
+
+    return json_decode((string) $response->getBody(), true);
+});
+
 
 Route::group(['namespace'=>'Api'],function(){
 
@@ -57,7 +73,7 @@ Route::group(['namespace'=>'Api'],function(){
 
     Route::group(['middleware'=>'client_credentials'],function(){
 
-
+        Route::get('home','ApiController@home');
         Route::post('sign_up','ApiController@sign_up');
         Route::get('categories','ApiController@categories');
         Route::get('publication/{id}/{type?}/{page?}','ApiController@publication');
