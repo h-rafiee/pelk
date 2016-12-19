@@ -14,4 +14,6 @@ return [
     'access'=>'دسترسی',
     'remember_me'=>'من را بخاطر بسپار',
     'settings'=>'تنظیمات',
+    'title_books' => ' | کتاب‌ها | :cat',
+    'title_magazines' => ' | مجله‌ها | :cat',
 ];
