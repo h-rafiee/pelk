@@ -105,7 +105,6 @@
                             $("img[data-img='"+point+"']").attr('src',img.src);
                         }
                     };
-                }
             }
         });
     </script>
