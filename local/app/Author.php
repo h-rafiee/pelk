@@ -21,10 +21,18 @@ class Author extends Model
     }
 
     public function wbooks_four(){
-        return $this->belongsToMany('App\Book','_writer_book','author_id')->orderBy('created_at','DESC')->take(4);
+        return $this->belongsToMany('App\Book','_writer_book','author_id')->orderBy('created_at','DESC')->take(5);
     }
 
     public function tbooks_four(){
-        return $this->belongsToMany('App\Book','_translator_book','author_id')->orderBy('created_at','DESC')->take(4);
+        return $this->belongsToMany('App\Book','_translator_book','author_id')->orderBy('created_at','DESC')->take(5);
+    }
+
+    public function wbooks_ten(){
+        return $this->belongsToMany('App\Book','_writer_book','author_id')->orderBy('created_at','DESC')->take(11);
+    }
+
+    public function tbooks_ten(){
+        return $this->belongsToMany('App\Book','_translator_book','author_id')->orderBy('created_at','DESC')->take(11);
     }
 }
