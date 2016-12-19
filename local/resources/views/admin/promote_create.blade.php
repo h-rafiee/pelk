@@ -1,5 +1,9 @@
 @extends('admin.master')
 
+@section('style')
+    <link rel="stylesheet" href="{{asset('assets/admin/vendor/jquery-alertable/css/jquery.alertable.css')}}">
+@endsection
+
 @section('content')
     <div class="row">
         <div class="col-lg-12">
@@ -76,5 +80,33 @@
 
 @section('scripts')
     <script src="{{asset('assets/admin/vendor/holder/holder.js')}}"></script>
-    @include('admin.objects.script_create_post')
+    @include('admin.objects.scripts_jqueryalertable')
+    <script>
+        $(".clickable").on('click',function(e){
+            e.preventDefault();
+            $("#"+$(this).attr('data-click')).click();
+        });
+
+        $(".uploadFile").on("change", function()
+        {
+            var select = $(this);
+            var point = $(this).attr('data-point');
+            var files = !!this.files ? this.files : [];
+            if (!files.length || !window.FileReader) return; // no file selected, or no FileReader support
+
+            if (/^image/.test( files[0].type)){ // only image file
+                var reader = new FileReader(); // instance of the FileReader
+                var  img;
+                reader.readAsDataURL(files[0]); // read the local file
+                reader.onloadend = function(){ // set image data as background of div
+                    img = new Image();
+                    img.src = this.result;
+                    img.onload = function () {
+                            $("img[data-img='"+point+"']").attr('src',img.src);
+                        }
+                    };
+                }
+            }
+        });
+    </script>
 @endsection
