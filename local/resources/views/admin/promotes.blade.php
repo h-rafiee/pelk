@@ -9,7 +9,7 @@
         <div class="col-lg-12">
             <div class="page-header">
                 <h1>{!! trans('admin.sliders') !!}</h1>
-                <a href="web/sliders/create"><span
+                <a href="sliders/create"><span
                             class="fa fa-file-o"></span> {!! trans('global.create_new',['name'=>trans('admin.slider')]) !!}
                 </a>
             </div>
