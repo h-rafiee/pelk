@@ -9,3 +9,5 @@ nbproject/*
 
 local/storage/oauth-private.key
 local/storage/oauth-public.key
+local/resources/views/datas/home.api.data.json
+local/resources/views/datas/home.data.json
