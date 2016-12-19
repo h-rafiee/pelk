@@ -10,6 +10,80 @@ use App\Http\Requests;
 
 class ApiController extends Controller
 {
+    public function home(){
+         if(file_exists(resource_path('views/datas/home.api.data.json'))){
+            $file_date = date("Y-m-d H:i:s",filemtime(resource_path('views/datas/home.api.data.json')));
+            $file_date = date_create($file_date);
+            $today_date = date("Y-m-d H:i:s");
+            $today_date = date_create($today_date);
+            $interval = date_diff($file_date, $today_date);
+            if($interval->d >= 7 ){
+                unlink(resource_path('views/datas/home.api.data.json'));
+            }
+        }
+        if(!file_exists(resource_path('views/datas/home.api.data.json'))|| true){
+            $template = parse_ini_file(app_path('mobiletemp.ini'),true);
+            $slider = parse_ini_file(app_path('mobilesliders.ini'),true);
+
+            $data = null;
+            $books = \App\Book::where('active',1)->orderBy('created_at','DESC')->take(10)->get()->toArray();
+            $magazines = \App\Magazine::where('active',1)->orderBy('created_at','DESC')->take(10)->get()->toArray();
+            $data['newest']['books'] = $books;
+            $data['newest']['magazines'] = $magazines;
+            $limit = 5;
+            $offset = 0;
+            $i = 0 ;
+            foreach($slider as $skey => $sval){
+                $data['sliders'][$i]['file']= $sval['file'];
+                $data['sliders'][$i]['banner']= $sval['banner'];
+                $data['sliders'][$i]['id']= $sval['value'];
+                $data['sliders'][$i]['type']= $sval['type'];
+                $i++;
+            }
+            $i = 0 ;
+            foreach($template as $key => $value){
+                $id = $value['value'];
+                $data['items'][$i]['file'] = $value['file'];
+                $data['items'][$i]['banner'] = $value['banner'];
+                switch($value['type']){
+                    case 'categories' :
+                        $data['items'][$i]['type'] = $value['type'];
+                        $data['items'][$i]['model'] = \App\Category::with(['books_ten','magazines_ten'])
+                            ->where('id',$id)->first();
+                        break;
+                    case 'tags' :
+                        $data['items'][$i]['type'] = $value['type'];
+                        $data['items'][$i]['model'] = \App\Tag::with(['books_ten','magazines_ten'])
+                            ->where('id',$id)->first();
+                        break;
+
+                    case 'publications' :
+                        $data['items'][$i]['type'] = $value['type'];
+                        $data['items'][$i]['model'] = \App\Publication::with(['books_ten','magazines_ten'])
+                            ->where('id',$id)->first();
+                        break;
+
+                    case 'writers' :
+                        $data['items'][$i]['type'] = $value['type'];
+                        $data['items'][$i]['model'] = \App\Author::with(['wbooks_ten'])
+                            ->where('type','writer')->where('id',$id)->first();
+                        break;
+
+                    case 'translators' :
+                        $data['items'][$i]['type'] = $value['type'];
+                        $data['items'][$i]['model'] = \App\Author::with(['tbooks_ten'])
+                            ->where('type','translator')->where('id',$id)->first();
+                        break;
+                }
+                $i++;
+            }
+            file_put_contents(resource_path('views/datas/home.api.data.json'),json_encode($data));
+        }
+        $home = file_get_contents(resource_path('views/datas/home.api.data.json'));
+        $home = json_Decode($home);
+        return response()->json($home);
+        
+    }
     public function sign_up(Request $request){
         $this->validate($request,[
             'name'=>'required',
