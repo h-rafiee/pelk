@@ -77,7 +77,7 @@ class BookController extends Controller
     }
 
     public function booksByWriter($title){
-        $writer = \App\Author::where('name',$title)->where('type','writer')>first();
+        $writer = \App\Author::where('name',$title)->where('type','writer')->first();
         if(empty($writer))
             abort(404);
         $w_id = $writer->id;
@@ -100,7 +100,7 @@ class BookController extends Controller
     }
 
     public function booksByTranslator($title){
-        $translator = \App\Author::where('name',$title)->where('type','translator')>first();
+        $translator = \App\Author::where('name',$title)->where('type','translator')->first();
         if(empty($translator))
             abort(404);
         $t_id = $translator->id;
