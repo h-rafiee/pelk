@@ -22,8 +22,8 @@ class ApiController extends Controller
             }
         }
         if(!file_exists(resource_path('views/datas/home.api.data.json'))|| true){
-            $template = parse_ini_file(app_path('mobiletemp.ini'),true);
-            $slider = parse_ini_file(app_path('mobilesliders.ini'),true);
+            $template = parse_ini_file(storage_path('template/mobiletemp.ini'),true);
+            $slider = parse_ini_file(storage_path('template/mobilesliders.ini'),true);
 
             $data = null;
             $books = \App\Book::where('active',1)->orderBy('created_at','DESC')->take(10)->get()->toArray();

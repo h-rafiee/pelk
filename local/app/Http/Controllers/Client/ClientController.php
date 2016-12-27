@@ -22,7 +22,7 @@ class ClientController extends Controller
             }
         }
         if(!file_exists(resource_path('views/datas/home.data.json'))){
-            $template = parse_ini_file(app_path('webtemp.ini'),true);
+            $template = parse_ini_file(storage_path('template/webtemp.ini'),true);
             $data = null;
             $limit = 5;
             $offset = 0;

@@ -33,7 +33,7 @@ class AdminController extends Controller
     }
 
     public function getWebTemplate(){
-        $template = parse_ini_file(app_path('webtemp.ini'),true);
+        $template = parse_ini_file(storage_path('template/webtemp.ini'),true);
         $data = null;
         foreach($template as $key => $value){
             switch($value['type']){
@@ -78,14 +78,14 @@ class AdminController extends Controller
             $i++;
         }
         $helper = new \App\Helpers\Helper();
-        $helper->write_ini_file($ordered_items,app_path('webtemp.ini'),true);
+        $helper->write_ini_file($ordered_items,storage_path('template/webtemp.ini'),true);
         return redirect('admin/web/template')->with('success', 'تنظیمات قالب ذخیره شد.');
     }
 
 
 
     public function getMobileTemplate(){
-        $template = parse_ini_file(app_path('mobiletemp.ini'),true);
+        $template = parse_ini_file(storage_path('template/mobiletemp.ini'),true);
         $data = null;
         foreach($template as $key => $value){
             switch($value['type']){
@@ -144,12 +144,12 @@ class AdminController extends Controller
             $i++;
         }
         $helper = new \App\Helpers\Helper();
-        $helper->write_ini_file($ordered_items,app_path('mobiletemp.ini'),true);
+        $helper->write_ini_file($ordered_items,storage_path('template/mobiletemp.ini'),true);
         return redirect('admin/mobile/template')->with('success', 'تنظیمات قالب ذخیره شد.');
     }
 
     public function getMobileSliders(){
-        $template = parse_ini_file(app_path('mobilesliders.ini'),true);
+        $template = parse_ini_file(storage_path('template/mobilesliders.ini'),true);
         $data = null;
         foreach($template as $key => $value){
             switch($value['type']){
@@ -208,7 +208,7 @@ class AdminController extends Controller
             $i++;
         }
         $helper = new \App\Helpers\Helper();
-        $helper->write_ini_file($ordered_items,app_path('mobilesliders.ini'),true);
+        $helper->write_ini_file($ordered_items,storage_path('template/mobilesliders.ini'),true);
         return redirect('admin/mobile/sliders')->with('success', 'تنظیمات اسلایدرها ذخیره شد.');
     }
 
