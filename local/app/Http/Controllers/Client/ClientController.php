@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 class ClientController extends Controller
 {
     function getHome(){
+        unlink(resource_path('views/datas/home.data.json'));
         if(file_exists(resource_path('views/datas/home.data.json'))){
             $file_date = date("Y-m-d H:i:s",filemtime(resource_path('views/datas/home.data.json')));
             $file_date = date_create($file_date);

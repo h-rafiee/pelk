@@ -11,7 +11,8 @@ use App\Http\Requests;
 class ApiController extends Controller
 {
     public function home(){
-         if(file_exists(resource_path('views/datas/home.api.data.json'))){
+        unlink(resource_path('views/datas/home.api.data.json'));
+        if(file_exists(resource_path('views/datas/home.api.data.json'))){
             $file_date = date("Y-m-d H:i:s",filemtime(resource_path('views/datas/home.api.data.json')));
             $file_date = date_create($file_date);
             $today_date = date("Y-m-d H:i:s");
