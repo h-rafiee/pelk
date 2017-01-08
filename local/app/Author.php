@@ -29,10 +29,10 @@ class Author extends Model
     }
 
     public function wbooks_ten(){
-        return $this->belongsToMany('App\Book','_writer_book','author_id')->orderBy('created_at','DESC')->take(11);
+        return $this->belongsToMany('App\Book','_writer_book','author_id')->with(['translators','writers','publication','category','tags'])->orderBy('created_at','DESC')->take(11);
     }
 
     public function tbooks_ten(){
-        return $this->belongsToMany('App\Book','_translator_book','author_id')->orderBy('created_at','DESC')->take(11);
+        return $this->belongsToMany('App\Book','_translator_book','author_id')->with(['translators','writers','category','publication','tags'])->orderBy('created_at','DESC')->take(11);
     }
 }

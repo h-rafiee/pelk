@@ -29,10 +29,10 @@ class Publication extends Model
     }
 
     public function books_ten(){
-        return $this->hasMany('App\Book','publication_id')->orderBy('created_at','DESC')->take(11);
+        return $this->hasMany('App\Book','publication_id')->with(['translators','writers','category','tags'])->orderBy('created_at','DESC')->take(11);
     }
 
     public function magazines_ten(){
-        return $this->hasMany('App\Magazine','publication_id')->orderBy('created_at','DESC')->take(11);
+        return $this->hasMany('App\Magazine','publication_id')->with(['category','tags'])->orderBy('created_at','DESC')->take(11);
     }
 }

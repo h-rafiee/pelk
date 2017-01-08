@@ -8,6 +8,10 @@ class Magazine extends Model
 {
     protected $table = 'magazines';
 
+    protected $hidden = [
+        'file', 'file_demo',
+    ];
+
     public function category(){
         return $this->belongsTo('App\Category','category_id');
     }

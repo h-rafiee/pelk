@@ -27,9 +27,9 @@ class Tag extends Model
     }
 
     public function books_ten(){
-        return $this->belongsToMany('App\Book','_tag_book')->orderBy('created_at','DESC')->take(11);
+        return $this->belongsToMany('App\Book','_tag_book')->with(['translators','writers','publication','category','tags'])->orderBy('created_at','DESC')->take(11);
     }
     public function magazines_ten(){
-        return $this->belongsToMany('App\Magazine','_tag_magazine')->orderBy('created_at','DESC')->take(11);
+        return $this->belongsToMany('App\Magazine','_tag_magazine')->with(['publication','category','tags'])->orderBy('created_at','DESC')->take(11);
     }
 }

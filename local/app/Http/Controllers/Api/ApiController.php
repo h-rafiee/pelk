@@ -27,8 +27,8 @@ class ApiController extends Controller
             $slider = parse_ini_file(storage_path('template/mobilesliders.ini'),true);
 
             $data = null;
-            $books = \App\Book::where('active',1)->orderBy('created_at','DESC')->take(10)->get()->toArray();
-            $magazines = \App\Magazine::where('active',1)->orderBy('created_at','DESC')->take(10)->get()->toArray();
+            $books = \App\Book::with(['translators','writers','publication','tags','category'])->where('active',1)->orderBy('created_at','DESC')->take(10)->get()->toArray();
+            $magazines = \App\Magazine::with(['publication','tags','category'])->where('active',1)->orderBy('created_at','DESC')->take(10)->get()->toArray();
             $data['newest']['books'] = $books;
             $data['newest']['magazines'] = $magazines;
             $limit = 5;

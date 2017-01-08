@@ -8,6 +8,10 @@ class Book extends Model
 {
     protected $table = 'books';
 
+    protected $hidden = [
+        'file', 'file_demo',
+    ];
+
     public function category(){
         return $this->belongsTo('App\Category','category_id');
     }
