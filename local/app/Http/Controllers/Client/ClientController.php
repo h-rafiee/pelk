@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Client;
 
-use Faker\Provider\zh_TW\DateTime;
 use Illuminate\Http\Request;
 use File;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class ClientController extends Controller
 {
@@ -89,6 +89,15 @@ class ClientController extends Controller
         return view('login',[
             'user_nav'=>'active'
         ]);
+    }
+
+    function postLogin(Request $request){
+        $email = $request->email;
+        $password = $request->password;
+        if (Auth::attempt(['email' => $email, 'password' => $password])) {
+            return redirect('profile');
+        }
+        return redirect('login');
     }
 
     function getProfile(){

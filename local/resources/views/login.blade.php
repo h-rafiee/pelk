@@ -17,6 +17,7 @@
                         <h2 class="form_title">ثبت نام</h2>
                         <form action="" method="POST">
                             <div class="field_group">
+                                {!! csrf_field() !!}
                                 <input type="email" name="email" class="rtl textbox" placeholder="پست الکترونیک">
                                 <input type="password" name="password" class="rtl textbox" placeholder="رمز جدید">
                                 <input type="password" name="password" class="rtl textbox" placeholder="تکرار رمز">
@@ -31,6 +32,7 @@
                         <div class="avatar ic-user"></div>
                         <h2 class="form_title">ورود به حساب کاربری</h2>
                         <form action="" method="POST">
+                            {!! csrf_field() !!}
                             <div class="field_group">
                                 <input type="email" name="email" class="rtl textbox" placeholder="پست الکترونیک">
                                 <input type="password" name="password" class="rtl textbox" placeholder="رمز ورود">
