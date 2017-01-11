@@ -72,8 +72,9 @@ Route::group(['namespace'=>'Client'],function(){
     Route::get('/','ClientController@getHome');
     Route::get('intro','ClientController@getIntro');
     Route::get('categories','ClientController@getCategories');
-    Route::get('login','ClientController@getLogin');
-    Route::get('profile','ClientController@getProfile');
+    Route::get('login',['middleware'=>'guest','uses'=>'ClientController@getLogin']);
+    Route::post('login',['middleware'=>'guest','uses'=>'ClientController@postLogin']);
+    Route::get('profile',['middleware'=>'auth','uses'=>'ClientController@getProfile']);
     Route::get('search','ClientController@getSearch');
 
     Route::get('books/categories/{title}','BookController@booksByCategory');
@@ -89,8 +90,30 @@ Route::group(['namespace'=>'Client'],function(){
     Route::get('book/{slug}/{title?}','BookController@book');
     Route::get('magazine/{slug}/{title?}','MagazineController@magazine');
 
+    Route::post('order', ['middleware'=>'auth','uses'=>'OrderController@postOrder']);
+    Route::get('bill/{code}', ['middleware'=>'auth','uses'=>'OrderController@getBill']);
+    Route::post('bill/{code}',['middleware'=>'auth','uses'=>'OrderController@postBill']);
+    Route::post('payment/retrieve/{payment}/{code}',['middleware'=>'auth','uses'=>'OrderController@postRetrieve']);
+
     Route::group(['middleware' => 'ajax'],function(){
         Route::post('search/books','AjaxController@searchBooks');
         Route::post('search/magazines','AjaxController@searchMagazines');
     });
+});
+
+Route::get('test/{class}',function($class){
+
+    $class = "\\App\\Payments\\".$class;
+    $pay = new $class();
+    $data = (object)[];
+    $data->api = 'asfasf1mnwn1kl2jnlk';
+    $pay->setSetting($data);
+    $pay->setAmount(1000);
+    $pay->setRedirect(url('/'));
+    $result = $pay->send(1);
+    $error = $pay->hasError($result);
+    if($error->error==true){
+        die($error->message);
+    }
+    return $pay->gateway($result);
 });
