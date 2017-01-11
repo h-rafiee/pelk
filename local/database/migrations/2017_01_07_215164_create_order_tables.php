@@ -19,9 +19,6 @@ class CreateOrderTables extends Migration
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')
                 ->references('id')->on('users');
-            $table->integer('payment_id')->unsigned();
-            $table->foreign('payment_id')
-                ->references('id')->on('payments');
             $table->string('price')->default(0);
             $table->text('params')->nullable();
             $table->boolean('pay')->default(0);

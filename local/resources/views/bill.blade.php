@@ -174,7 +174,7 @@
                         <div class="payment">
                             @foreach($payments as $payment)
                                 <label for="{{$payment->slug}}">
-                                    <?php $setting = jsone_decode($payment->params); ?>
+                                    <?php $setting = json_decode($payment->params); ?>
                                     <input type="radio" name="payment" value="{{$payment->slug}}" id="{{$payment->slug}}" checked >
                                     <img class="active" src="{{url($setting->logo)}}" alt="">
                                 </label>
