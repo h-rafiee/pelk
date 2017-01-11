@@ -70,8 +70,13 @@
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="action_btn">
-                                    <a href="#" class="orange"><span>خرید</span>{{number_format($model->price)}} تومان</a>
-                                    <a href="#" class="brown"><span>دریافت نمونه {!! trans('admin.'.$type) !!}</span>رایگان</a>
+                                    <form action="{{url('order')}}" method="post">
+                                        {!! csrf_field() !!}
+                                        <input type="hidden" name="_item" value="{!! Crypt::encrypt($model->slug) !!}">
+                                        <input type="hidden" name="_item_type" value="{!! Crypt::encrypt('book') !!}">
+                                        <button class="orange"><span>خرید</span>{{number_format($model->price)}} تومان</button>
+                                    </form>
+                                    {{--<a href="#" class="brown"><span>دریافت نمونه {!! trans('admin.'.$type) !!}</span>رایگان</a>--}}
                                 </div>
                                 <div class="book_credit">
                                     <div>
