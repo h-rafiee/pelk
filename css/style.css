@@ -791,9 +791,11 @@ form.blur {
   margin: 1rem 190px 1rem 1rem;
   direction: rtl;
 }
-.action_btn a {
+.action_btn button {
+  cursor: pointer;
   width: 196px;
-  height: 63px;
+  height: 85px;
+  border:0px;
   color: #fff;
   text-shadow: 0 1px rgba(0, 0, 0, .6);
   border-radius: 2px;
@@ -804,17 +806,17 @@ form.blur {
   text-align: center;
   padding: 10px 0;
 }
-.action_btn a:hover {
+.action_btn button:hover {
   color: #fff;
 }
-.action_btn a span {
+.action_btn button span {
   display: block;
   font-size: 1.6rem;
 }
-.action_btn a.orange {
+.action_btn button.orange {
   background: #e76a4a;
 }
-.action_btn a.brown {
+.action_btn button.brown {
   background: #4d4844;
 }
 .book_credit {
