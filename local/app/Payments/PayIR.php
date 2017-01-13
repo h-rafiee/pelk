@@ -26,6 +26,10 @@ class PayIR extends Payment {
         die();
     }
 
+    public function gatelink($result){
+        return "https://pay.ir/payment/gateway/{$result->transId}";
+    }
+
     public function redirect($data){
         $result = (object) [];
         $result->status = 'done';
