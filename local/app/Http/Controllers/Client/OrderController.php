@@ -140,6 +140,92 @@ class OrderController extends Controller
             ['order_id' => $order->id, 'payment_id' => $payment->id],
             ['pay' => 1]
         );
+        foreach($order->books as $item){
+            $user_book = new \App\UserBook();
+            $user_book->user_id = $order->user_id;
+            $user_book->book_id = $item->id;
+            $user_book->save();
+        }
+        foreach($order->magazines as $item){
+            $user_magazine = new \App\UserMagazine();
+            $user_magazine->user_id = $order->user_id;
+            $user_magazine->magazine_id = $item->id;
+            $user_magazine->save();
+        }
         return redirect('bill/'.$order->code)->with(['status'=>'done','message'=>$check->message]);
     }
+    // Mobiles
+    function postRetrieveMob(Request $request,$payment,$code){
+        $payment = \App\Payment::where('slug',$payment)->first();
+        if(empty($payment)){
+            die("ERROR Payment");
+        }
+        $order = \App\Order::with(['user','books','magazines'])->where('code',$code)->first();
+        if(empty($order)){
+            die("ERROR Order");
+        }
+
+        $class = "\\App\\Payments\\".$payment->class_name;
+        $pay = new $class();
+        $setting = json_decode($payment->params);
+        $pay->setSetting($setting);
+        $check=$pay->redirect((object) $request->all());
+        if($check->status == 'fail'){
+            $orderPay = \App\OrderPayment::updateOrCreate(
+                ['order_id' => $order->id, 'payment_id' => $payment->id],
+                ['params' => json_encode($request->all())]
+            );
+            die("ERROR die");
+        }
+        $result = $pay->verify((object) $request->all());
+        $orderPay = \App\OrderPayment::updateOrCreate(
+            ['order_id' => $order->id, 'payment_id' => $payment->id],
+            ['params' => json_encode($result)]
+        );
+        $error = $pay->hasError($result);
+        if($error->error==true){
+            die($error->message);
+        }
+        $order->pay = 1;
+        $order->save();
+        $orderPay = \App\OrderPayment::updateOrCreate(
+            ['order_id' => $order->id, 'payment_id' => $payment->id],
+            ['pay' => 1]
+        );
+
+        foreach($order->books as $item){
+            $user_book = new \App\UserBook();
+            $user_book->user_id = $order->user_id;
+            $user_book->book_id = $item->id;
+            $user_book->save();
+        }
+        foreach($order->magazines as $item){
+            $user_magazine = new \App\UserMagazine();
+            $user_magazine->user_id = $order->user_id;
+            $user_magazine->magazine_id = $item->id;
+            $user_magazine->save();
+        }
+        return redirect('bill/'.$order->code.'/mob')->with(['status'=>'done','message'=>$check->message]);
+    }
+
+    function getBillMob($code){
+        $order = \App\Order::with(['user','books','magazines'])->where('code',$code)->first();
+        if(empty($order)){
+            die("ERROR");
+        }
+        if($order->pay == 0){
+            $payments  = \App\Payment::where('active',1)->get();
+
+        }else{
+            $payments  = \App\OrderPayment::with(['payment'])->where('order_id',$order->id)->where('pay',1)->first();
+        }
+
+        $data = [
+            'model'=>$order,
+            'payments'=>$payments
+        ];
+        return view('bill_mob',$data);
+    }
+
+
 }

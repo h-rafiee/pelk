@@ -91,8 +91,10 @@ Route::group(['namespace'=>'Client'],function(){
     Route::get('magazine/{slug}/{title?}','MagazineController@magazine');
 
     Route::post('order', ['middleware'=>'auth','uses'=>'OrderController@postOrder']);
+    Route::get('bill/{code}/mob', 'OrderController@getBillMob');
     Route::get('bill/{code}', ['middleware'=>'auth','uses'=>'OrderController@getBill']);
     Route::post('bill/{code}',['middleware'=>'auth','uses'=>'OrderController@postBill']);
+    Route::post('payment/retrieve/{payment}/{code}/mob','OrderController@postRetrieveMob');
     Route::post('payment/retrieve/{payment}/{code}',['middleware'=>'auth','uses'=>'OrderController@postRetrieve']);
 
     Route::group(['middleware' => 'ajax'],function(){
@@ -115,5 +117,6 @@ Route::get('test/{class}',function($class){
     if($error->error==true){
         die($error->message);
     }
+
     return $pay->gateway($result);
 });

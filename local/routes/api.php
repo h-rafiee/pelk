@@ -65,10 +65,14 @@ Route::post('refresh_token',function(Request $request){
 Route::group(['namespace'=>'Api'],function(){
 
     Route::group(['middleware'=>'auth:api'],function(){
-        // TODO edit profile
+
         Route::get('user',function(Request $request){
             return $request->user();
         });
+        Route::post('order','OrderController@order');
+        Route::get('bill/{code}','OrderController@bill');
+        Route::get('payments','OrderController@payments');
+        Route::get('gateway/{payment_slug}/{order_code}','OrderController@gateway');
     });
 
     Route::group(['middleware'=>'client_credentials'],function(){
