@@ -152,6 +152,7 @@ class BookController extends Controller
         $book->price = (empty($request->get('price')))?0:$request->get('price');
         $book->file = $bookURL;
         $book->file_demo = $bookDemoURL;
+        $book->has_demo = (empty($bookDemoURL))?0:1;
         $book->description = $request->get('description');
         $book->text = $request->get('text');
         $book->isbn = $request->get('isbn');
@@ -356,6 +357,7 @@ class BookController extends Controller
             if(file_exists(public_path($book->file_demo)))
                 unlink(public_path($book->file_demo));
             $book->file_demo = $bookDemoURL;
+            $book->has_demo = 1;
         }
         $book->description = $request->get('description');
         $book->text = $request->get('text');
