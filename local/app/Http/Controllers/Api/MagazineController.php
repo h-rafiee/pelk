@@ -135,6 +135,32 @@ class MagazineController extends Controller
         return response()->json($data);
     }
 
+    public function addToBookshelf(Request $request , $id){
+        $data['status']='done';
+        $data['message']='add';
+        $user_id = $request->user()->id;
+        $magazine_id = $id;
+        $magazine = \App\Book::where('id',$magazine_id)->where('has_demo',1)->first();
+        if(empty($magazine)){
+            $data['status']='fail';
+            $data['message']='can not find magazine';
+            return response()->json($data);
+        }
+        if(\App\UserMagazine::where('user_id',$user_id)->where('magazine_id',$magazine_id)->where('demo',1)->count()>0){
+            $data['status']='fail';
+            $data['message']='exist in your shelf';
+            return response()->json($data);
+        }
+
+        $user_magazine = new \App\UserMagazine();
+        $user_magazine->user_id = $user_id;
+        $user_magazine->magazine_id = $magazine_id;
+        $user_magazine->demo = 1;
+        $user_magazine->save();
+        return response()->json($data);
+
+    }
+
     public function range_job($range,$items){
         list($start,$end) = explode(",",$range);
         $items = collect($items);

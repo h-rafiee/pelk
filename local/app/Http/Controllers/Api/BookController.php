@@ -134,6 +134,32 @@ class BookController extends Controller
         return response()->json($data);
     }
 
+    public function addToBookshelf(Request $request , $id){
+        $data['status']='done';
+        $data['message']='add';
+        $user_id = $request->user()->id;
+        $book_id = $id;
+        $book = \App\Book::where('id',$book_id)->where('has_demo',1)->first();
+        if(empty($book)){
+            $data['status']='fail';
+            $data['message']='can not find book';
+            return response()->json($data);
+        }
+        if(\App\UserBook::where('user_id',$user_id)->where('book_id',$book_id)->where('demo',1)->count()>0){
+            $data['status']='fail';
+            $data['message']='exist in your shelf';
+            return response()->json($data);
+        }
+
+        $user_book = new \App\UserBook();
+        $user_book->user_id = $user_id;
+        $user_book->book_id = $book_id;
+        $user_book->demo = 1;
+        $user_book->save();
+        return response()->json($data);
+
+    }
+
     public function range_job($range,$items){
         list($start,$end) = explode(",",$range);
         $items = collect($items);
