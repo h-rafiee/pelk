@@ -22,6 +22,7 @@ class CreateUserBookTable extends Migration
             $table->integer('book_id')->unsigned();
             $table->foreign('book_id')
                 ->references('id')->on('books');
+            $table->boolean('demo')->default(0);
             $table->string('key')->nullable();
             $table->string('public')->nullable();
             $table->string('private')->nullable();

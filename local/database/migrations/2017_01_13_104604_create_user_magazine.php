@@ -22,6 +22,7 @@ class CreateUserMagazine extends Migration
             $table->integer('magazine_id')->unsigned();
             $table->foreign('magazine_id')
                 ->references('id')->on('magazines');
+            $table->boolean('demo')->default(0);
             $table->string('key')->nullable();
             $table->string('public')->nullable();
             $table->string('private')->nullable();
