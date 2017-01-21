@@ -96,27 +96,10 @@ Route::group(['namespace'=>'Client'],function(){
     Route::post('bill/{code}',['middleware'=>'auth','uses'=>'OrderController@postBill']);
     Route::post('payment/retrieve/{payment}/{code}/mob','OrderController@postRetrieveMob');
     Route::post('payment/retrieve/{payment}/{code}',['middleware'=>'auth','uses'=>'OrderController@postRetrieve']);
+    Route::get('gateway/{payment_slug}/{order_code}','OrderController@gateway');
 
     Route::group(['middleware' => 'ajax'],function(){
         Route::post('search/books','AjaxController@searchBooks');
         Route::post('search/magazines','AjaxController@searchMagazines');
     });
-});
-
-Route::get('test/{class}',function($class){
-
-    $class = "\\App\\Payments\\".$class;
-    $pay = new $class();
-    $data = (object)[];
-    $data->api = 'asfasf1mnwn1kl2jnlk';
-    $pay->setSetting($data);
-    $pay->setAmount(1000);
-    $pay->setRedirect(url('/'));
-    $result = $pay->send(1);
-    $error = $pay->hasError($result);
-    if($error->error==true){
-        die($error->message);
-    }
-
-    return $pay->gateway($result);
 });

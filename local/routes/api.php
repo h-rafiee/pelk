@@ -66,13 +66,19 @@ Route::group(['namespace'=>'Api'],function(){
 
     Route::group(['middleware'=>'auth:api'],function(){
 
-        Route::get('user',function(Request $request){
-            return $request->user();
-        });
+        Route::get('user','UserController@user');
+        Route::get('user/orders','UserController@orders');
+        Route::post('user/update','UserController@update');
+
+        Route::get('add_bookshelf/demo/book/{id}','BookController@addToBookshelf');
+        Route::get('add_bookshelf/demo/magazine/{id}','MagazineController@addToBookshelf');
+
+        Route::get('download/book/{id}/{demo?}','DownloadController@book');
+        Route::get('download/magazine/{id}/{demo?}','DownloadController@magazine');
+
         Route::post('order','OrderController@order');
         Route::get('bill/{code}','OrderController@bill');
         Route::get('payments','OrderController@payments');
-        Route::get('gateway/{payment_slug}/{order_code}','OrderController@gateway');
     });
 
     Route::group(['middleware'=>'client_credentials'],function(){
