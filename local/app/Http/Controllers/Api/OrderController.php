@@ -12,8 +12,15 @@ class OrderController extends Controller
     function order(Request $request){
         $user = $request->user();
         $total_price = 0;
-        $books = $request->books;
-        $magazines = $request->magazines;
+        $books_id = $request->books_id;
+        $magazines_id = $request->magazines_id;
+
+        $books = [];
+        $magazines = [];
+        if(!empty($books_id))
+            $books = \App\Book::whereIn('id',$books_id)->where('active',1)->get();
+        if(!empty($magazines_id))
+            $magazines = \App\Magazine::whereIn('id',$magazines_id)->where('active',1)->get();
 
         $collect_books = collect($books);
         $total_price = $total_price + $collect_books->sum('price');
@@ -34,7 +41,7 @@ class OrderController extends Controller
 
         $data_books = null;
         foreach($books as $item){
-            $data_books[] = ['order_id'=>$order->id , 'book_id' => $item['id'] , 'price' => $item['price'] ];
+            $data_books[] = ['order_id'=>$order->id , 'book_id' => $item->id , 'price' => $item->price ];
         }
         if(!empty($data_books)){
             DB::table('_order_book')->insert(
@@ -44,7 +51,7 @@ class OrderController extends Controller
 
         $data_magazines = null;
         foreach($magazines as $item){
-            $data_magazines[] = ['order_id'=>$order->id , 'magazine_id' => $item['id'] , 'price' => $item['price'] ];
+            $data_magazines[] = ['order_id'=>$order->id , 'magazine_id' => $item->id , 'price' => $item->price ];
         }
         if(!empty($data_magazines)){
             DB::table('_order_magazine')->insert(
@@ -74,35 +81,6 @@ class OrderController extends Controller
     function payments(Request $request){
         $data['status'] = 'done';
         $data['payments'] = \App\Payment::where('active',1)->get();
-        return response()->json($data);
-    }
-
-    function gateway(Request $request,$payment_slug,$order_code){
-        $data['status']='done';
-        $payment = \App\Payment::where('slug',$payment_slug)->first();
-        if(empty($payment)){
-            die("ERROR Payment");
-        }
-        $order = \App\Order::with(['user','books','magazines'])->where('user_id',$request->user()->id)->where('code',$order_code)->where('pay',0)->first();
-        if(empty($order)){
-            die("ERROR Order");
-        }
-        $class = "\\App\\Payments\\".$payment->class_name;
-        $pay = new $class();
-        $setting = json_decode($payment->params);
-        $pay->setSetting($setting);
-        $pay->setAmount($order->price);
-        $pay->setRedirect(url("/payment/retrieve/{$payment->slug}/{$order->code}/mob"));
-        $result = $pay->send($order->id);
-        $orderPay = \App\OrderPayment::updateOrCreate(
-            ['order_id' => $order->id, 'payment_id' => $payment->id],
-            ['params' => json_encode($result)]
-        );
-        $error = $pay->hasError($result);
-        if($error->error==true){
-            die($error->message);
-        }
-        $data['gate_link'] = $pay->gatelink($result);
         return response()->json($data);
     }
 }

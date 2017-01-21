@@ -227,5 +227,32 @@ class OrderController extends Controller
         return view('bill_mob',$data);
     }
 
+    function gateway($payment_slug,$order_code){
+        $data['status']='done';
+        $payment = \App\Payment::where('slug',$payment_slug)->first();
+        if(empty($payment)){
+            die("ERROR Payment");
+        }
+        $order = \App\Order::with(['user','books','magazines'])->where('code',$order_code)->where('pay',0)->first();
+        if(empty($order)){
+            die("ERROR Order");
+        }
+        $class = "\\App\\Payments\\".$payment->class_name;
+        $pay = new $class();
+        $setting = json_decode($payment->params);
+        $pay->setSetting($setting);
+        $pay->setAmount($order->price);
+        $pay->setRedirect(url("/payment/retrieve/{$payment->slug}/{$order->code}/mob"));
+        $result = $pay->send($order->id);
+        $orderPay = \App\OrderPayment::updateOrCreate(
+            ['order_id' => $order->id, 'payment_id' => $payment->id],
+            ['params' => json_encode($result)]
+        );
+        $error = $pay->hasError($result);
+        if($error->error==true){
+            die($error->message);
+        }
+        return $pay->gateway($result);
+    }
 
 }
