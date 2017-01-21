@@ -27,6 +27,8 @@ class CreateBooksTable extends Migration
             $table->string('title');
             $table->string('price')->default('0');
             $table->string('file');
+            $table->string('file_demo')->nullable();
+            $table->boolean('has_demo')->default(0);
             $table->text('description')->nullable();
             $table->longText('text')->nullable();
             $table->string('image')->nullable();
