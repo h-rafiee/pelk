@@ -70,8 +70,10 @@ Route::group(['namespace'=>'Api'],function(){
         Route::get('user/orders','UserController@orders');
         Route::post('user/update','UserController@update');
 
-        Route::get('add_bookshelf/demo/book/{id}','BookController@addToBookshelf');
-        Route::get('add_bookshelf/demo/magazine/{id}','MagazineController@addToBookshelf');
+        Route::get('add_bookshelf/demo/book/{id}','BookController@addToBookshelfDemo');
+        Route::get('add_bookshelf/free/book/{id}','BookController@addToBookshelfFree');
+        Route::get('add_bookshelf/demo/magazine/{id}','MagazineController@addToBookshelfDemo');
+        Route::get('add_bookshelf/free/magazine/{id}','MagazineController@addToBookshelfFree');
 
         Route::get('download/book/{id}/{demo?}','DownloadController@book');
         Route::get('download/magazine/{id}/{demo?}','DownloadController@magazine');

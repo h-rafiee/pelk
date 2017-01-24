@@ -12,7 +12,7 @@ class UserController extends Controller
     function user(Request $request){
         $user_id = $request->user()->id;
         $data['status']='done';
-        $data['user']= \App\User::with(['books','magazines'])->find($user_id);
+        $data['user']= \App\User::find($user_id);
         $data['books'] = \App\UserBook::where('user_id',$user_id)->get();
         $data['magazines'] = \App\UserMagazine::where('user_id',$user_id)->get();
         return response()->json($data);

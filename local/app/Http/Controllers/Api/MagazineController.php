@@ -18,6 +18,14 @@ class MagazineController extends Controller
             $data['status'] = 'fail';
             $data['message'] = 'not valid magazine';
         }
+        $tag_ids = $data['magazine']->tags()->pluck('id');
+        $data['related_magazines'] = \App\Magazine::whereHas('tags', function($q) use ($tag_ids) {
+                $q->whereIn('id', $tag_ids);
+            })
+            ->where('id','!=',$id)
+            ->orderBy('created_at')
+            ->take(10)
+            ->get();
         return response()->json($data);
     }
 
@@ -135,7 +143,7 @@ class MagazineController extends Controller
         return response()->json($data);
     }
 
-    public function addToBookshelf(Request $request , $id){
+    public function addToBookshelfDemo(Request $request , $id){
         $data['status']='done';
         $data['message']='add';
         $user_id = $request->user()->id;
@@ -156,6 +164,31 @@ class MagazineController extends Controller
         $user_magazine->user_id = $user_id;
         $user_magazine->magazine_id = $magazine_id;
         $user_magazine->demo = 1;
+        $user_magazine->save();
+        return response()->json($data);
+
+    }
+
+    public function addToBookshelfFree(Request $request , $id){
+        $data['status']='done';
+        $data['message']='add';
+        $user_id = $request->user()->id;
+        $magazine_id = $id;
+        $magazine = \App\Book::where('id',$magazine_id)->where('price',0)->first();
+        if(empty($magazine)){
+            $data['status']='fail';
+            $data['message']='can not find magazine';
+            return response()->json($data);
+        }
+        if(\App\UserMagazine::where('user_id',$user_id)->where('magazine_id',$magazine_id)->where('demo',0)->count()>0){
+            $data['status']='fail';
+            $data['message']='exist in your shelf';
+            return response()->json($data);
+        }
+
+        $user_magazine = new \App\UserMagazine();
+        $user_magazine->user_id = $user_id;
+        $user_magazine->magazine_id = $magazine_id;
         $user_magazine->save();
         return response()->json($data);
 

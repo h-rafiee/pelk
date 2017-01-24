@@ -18,6 +18,14 @@ class BookController extends Controller
             $data['status'] = 'fail';
             $data['message'] = 'not valid book';
         }
+        $tag_ids = $data['book']->tags()->pluck('id');
+        $data['related_books'] = \App\Book::whereHas('tags', function($q) use ($tag_ids) {
+            $q->whereIn('id', $tag_ids);
+        })
+            ->where('id','!=',$id)
+            ->orderBy('created_at')
+            ->take(10)
+            ->get();
         return response()->json($data);
     }
 
@@ -134,7 +142,7 @@ class BookController extends Controller
         return response()->json($data);
     }
 
-    public function addToBookshelf(Request $request , $id){
+    public function addToBookshelfDemo(Request $request , $id){
         $data['status']='done';
         $data['message']='add';
         $user_id = $request->user()->id;
@@ -155,6 +163,31 @@ class BookController extends Controller
         $user_book->user_id = $user_id;
         $user_book->book_id = $book_id;
         $user_book->demo = 1;
+        $user_book->save();
+        return response()->json($data);
+
+    }
+
+    public function addToBookshelfFree(Request $request , $id){
+        $data['status']='done';
+        $data['message']='add';
+        $user_id = $request->user()->id;
+        $book_id = $id;
+        $book = \App\Book::where('id',$book_id)->where('price',0)->first();
+        if(empty($book)){
+            $data['status']='fail';
+            $data['message']='can not find book';
+            return response()->json($data);
+        }
+        if(\App\UserBook::where('user_id',$user_id)->where('book_id',$book_id)->where('demo',0)->count()>0){
+            $data['status']='fail';
+            $data['message']='exist in your shelf';
+            return response()->json($data);
+        }
+
+        $user_book = new \App\UserBook();
+        $user_book->user_id = $user_id;
+        $user_book->book_id = $book_id;
         $user_book->save();
         return response()->json($data);
 
