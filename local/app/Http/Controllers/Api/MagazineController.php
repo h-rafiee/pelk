@@ -148,7 +148,7 @@ class MagazineController extends Controller
         $data['message']='add';
         $user_id = $request->user()->id;
         $magazine_id = $id;
-        $magazine = \App\Book::where('id',$magazine_id)->where('has_demo',1)->first();
+        $magazine = \App\Magazine::where('id',$magazine_id)->where('has_demo',1)->first();
         if(empty($magazine)){
             $data['status']='fail';
             $data['message']='can not find magazine';
@@ -174,7 +174,7 @@ class MagazineController extends Controller
         $data['message']='add';
         $user_id = $request->user()->id;
         $magazine_id = $id;
-        $magazine = \App\Book::where('id',$magazine_id)->where('price',0)->first();
+        $magazine = \App\Magazine::where('id',$magazine_id)->where('price',0)->first();
         if(empty($magazine)){
             $data['status']='fail';
             $data['message']='can not find magazine';
