@@ -13,8 +13,8 @@ class UserController extends Controller
         $user_id = $request->user()->id;
         $data['status']='done';
         $data['user']= \App\User::find($user_id);
-        $data['books'] = \App\UserBook::where('user_id',$user_id)->get();
-        $data['magazines'] = \App\UserMagazine::where('user_id',$user_id)->get();
+        $data['books'] = \App\UserBook::with(['book'])->where('user_id',$user_id)->get();
+        $data['magazines'] = \App\UserMagazine::with(['magazine'])->where('user_id',$user_id)->get();
         return response()->json($data);
     }
 
