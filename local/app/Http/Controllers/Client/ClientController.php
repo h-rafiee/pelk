@@ -7,6 +7,7 @@ use File;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Crypt;
 
 class ClientController extends Controller
 {
@@ -101,14 +102,77 @@ class ClientController extends Controller
     }
 
     function getProfile(){
+        $user_id = Auth::user()->id;
+        $user = \App\User::find($user_id);
+        $books = \App\UserBook::with('book')->where('user_id',$user_id)->get();
+        $magazines = \App\UserMagazine::with('magazine')->where('user_id',$user_id)->get();
         return view('profile',[
-            'user_nav'=>'active'
+            'user_nav'=>'active',
+            'user'=>$user,
+            'books'=>$books,
+            'magazines'=>$magazines
         ]);
+    }
+
+    function editProfile(Request $request){
+        $user_id = Auth::user()->id;
+        $user = \App\User::find($user_id);
+        $user->name = $request->get('name');
+        if(!empty($request->get('username')) && $user->username != $request->get('username')){
+            if(\App\User::where('username',$request->get('username'))->count()>0){
+                $data['status']='fail';
+                $data['message']='username exist';
+                return redirect('profile')->with($data);
+            }
+            $user->username = $request->get('username');
+        }
+        if($user->email != $request->get('email')){
+            if(\App\User::where('email',$request->get('email'))->count()>0){
+                $data['status']='fail';
+                $data['message']='email exist';
+                return redirect('profile')->with($data);
+            }
+            $user->email = $request->get('email');
+        }
+        $file = $request->file('uploader');
+        $fileURL = null;
+        if (!empty($file)) {
+            $extension = last(explode(".",$file));
+            $desPath = "uploads/users/".hash('adler32',$user_id);
+            if(!is_dir($desPath))
+                mkdir($desPath,0775,true);
+            $rand = $this->generateRandomString(30);
+            $fileName = $rand.".".$extension;
+            while(file_exists($desPath.'/'.$fileName) == true){
+                $rand = $this->generateRandomString(30);
+                $fileName = $rand.".".$extension;
+            }
+            if(rename($file,$desPath.'/'.$fileName)){
+                $fileURL = $desPath.'/'.$fileName;
+            }
+        }
+        if(!empty($request->get('password'))){
+            $user->password = \Hash::make($request->get('password'));
+        }
+        if(!empty($fileURL)){
+            if(!empty($user->profile_pic) && file_exists(public_path($user->profile_pic)))
+                unlink(public_path($user->profile_pic));
+            $user->profile_pic = $fileURL;
+        }
+        $user->mobile = (empty($request->get('mobile')))?'':$request->get('mobile');
+        $user->save();
+        $data['status']='done';
+        $data['message']='update';
+        return redirect('profile')->with($data);
     }
 
     function getSearch(){
         return view('search',[
             'search_nav'=>'active'
         ]);
+    }
+
+    private function generateRandomString($length = 10) {
+        return substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, $length);
     }
 }

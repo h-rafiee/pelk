@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Http\Request;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -75,6 +77,7 @@ Route::group(['namespace'=>'Client'],function(){
     Route::get('login',['middleware'=>'guest','uses'=>'ClientController@getLogin']);
     Route::post('login',['middleware'=>'guest','uses'=>'ClientController@postLogin']);
     Route::get('profile',['middleware'=>'auth','uses'=>'ClientController@getProfile']);
+    Route::post('profile/edit',['middleware' => 'auth','uses'=>'ClientController@editProfile']);
     Route::get('search','ClientController@getSearch');
 
     Route::get('books/categories/{title}','BookController@booksByCategory');
