@@ -298,13 +298,13 @@ class MagazineController extends Controller
         $magazine->title = $request->get('title');
         $magazine->price = (empty($request->get('price')))?0:$request->get('price');
         if(!empty($magURL)){
-            if(file_exists(public_path($magazine->file)))
+            if(!empty($magazine->file) && file_exists(public_path($magazine->file)))
                 unlink(public_path($magazine->file));
             $magazine->file = $magURL;
         }
 
         if(!empty($magDemoURL)){
-            if(file_exists(public_path($magazine->file_demo)))
+            if(!empty($magazine->file_demo) && file_exists(public_path($magazine->file_demo)))
                 unlink(public_path($magazine->file_demo));
             $magazine->file_demo = $magDemoURL;
             $magazine->has_demo = 1;

@@ -349,12 +349,12 @@ class BookController extends Controller
         $book->title = $request->get('title');
         $book->price = (empty($request->get('price')))?0:$request->get('price');
         if(!empty($bookURL)){
-            if(file_exists(public_path($book->file)))
+            if(!empty($book->file) &&  file_exists(public_path($book->file)))
                 unlink(public_path($book->file));
             $book->file = $bookURL;
         }
         if(!empty($bookDemoURL)){
-            if(file_exists(public_path($book->file_demo)))
+            if(!empty($book->file_demo) && file_exists(public_path($book->file_demo)))
                 unlink(public_path($book->file_demo));
             $book->file_demo = $bookDemoURL;
             $book->has_demo = 1;
