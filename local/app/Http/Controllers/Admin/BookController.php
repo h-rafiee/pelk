@@ -71,6 +71,7 @@ class BookController extends Controller
             'image' =>   'required|mimes:jpg,jpeg,bmp,png',
         ]);
         $helper = new \App\Helpers\Helper();
+        $ftpFiles = [];
         $fileURL = null;
         if ($request->hasFile('image')) {
             $desPath = "uploads/books/".$request->get('slug').'/'.date("Ymd");
@@ -104,7 +105,7 @@ class BookController extends Controller
             if(rename($file,$desPath.'/'.$fileName)){
                 $bookURL = $desPath.'/'.$fileName;
                 $bookURL = $helper->encrypt_file($bookURL,TRUE);
-                $helper->move_to_ftp($bookURL);
+                $ftpFiles[]= $bookURL;
             }
         }
 
@@ -127,9 +128,12 @@ class BookController extends Controller
             if(rename($file_demo,$desPath.'/'.$fileName)){
                 $bookDemoURL = $desPath.'/'.$fileName;
                 $bookDemoURL = $helper->encrypt_file($bookDemoURL,TRUE);
-                $helper->move_to_ftp($bookDemoURL);
+                $ftpFiles[]= $bookDemoURL;
             }
         }
+
+        $helper->move_to_ftp($ftpFiles);
+
 
         while(\App\Book::where('slug',$request->get('slug'))->first()){
             $input = $request->all();
@@ -300,7 +304,7 @@ class BookController extends Controller
             }
         }
         $file = $request->get('file');
-
+        $ftpFiles = [];
         $bookURL = null;
         if (!empty($file)) {
             $extension = last(explode(".",$file));
@@ -316,7 +320,7 @@ class BookController extends Controller
             if(rename($file,$desPath.'/'.$fileName)){
                 $bookURL = $desPath.'/'.$fileName;
                 $bookURL = $helper->encrypt_file($bookURL,TRUE);
-                $helper->move_to_ftp($bookURL);
+                $ftpFiles[] = $bookURL;
 
             }
         }
@@ -338,11 +342,11 @@ class BookController extends Controller
             if(rename($file_demo,$desPath.'/'.$fileName)){
                 $bookDemoURL = $desPath.'/'.$fileName;
                 $bookDemoURL = $helper->encrypt_file($bookDemoURL,TRUE);
-                $helper->move_to_ftp($bookDemoURL);
+                $ftpFiles[] = $bookDemoURL;
 
             }
         }
-
+        $helper->move_to_ftp($ftpFiles);
         if(is_numeric($request->get('publication'))){
             $publication = \App\Publication::find($request->get('publication'));
         }else{

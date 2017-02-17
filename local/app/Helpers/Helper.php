@@ -45,19 +45,19 @@ class Helper
         return $success;
     }
 
-    public function move_to_ftp($file){
-        $ftp = new \App\FtpClient\FtpClient();
-        $ftp->connect(config('ftp.ip'));
-        $ftp->login(config('ftp.user'), config('ftp.password'));
-        $file = public_path($file);
-        $path = pathinfo($file);
-        $path['dirname'] = 'pelck/'.$path['dirname'];
-        $ftp->mkdir($path['dirname'],true);
-        if($ftp->put($path['dirname'].'/'.$path['filename'],$file,FTP_BINARY)){
-            unlink($file);
-            return TRUE;
+    public function move_to_ftp($files = []){
+        $ftp = new \App\FTPClient\FTPClient();
+        $ftp->connect(config('ftp.ip'),config('ftp.user'),config('ftp.password'));
+        foreach($files as $file){
+            $path = pathinfo($file);
+            $path['dirname'] = 'pelck/'.$path['dirname'];
+            $file = public_path($file);
+            $ftp->makeDirRecursive($path['dirname']);
+            if($ftp->uploadFile($file,$path['dirname'].'/'.$path['filename'])){
+                unlink($file);
+            }
         }
-        return FALSE;
+        return TRUE;
     }
 
     public function encrypt_file($file , $remove_original = FALSE){
