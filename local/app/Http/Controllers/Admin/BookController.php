@@ -57,9 +57,7 @@ class BookController extends Controller
         $input['title']= trim($input['title']);
         $input['publication']= trim($input['publication']);
         $time = time();
-        if(empty($input['slug'])){
-            $input['slug'] = "Book-".substr(str_shuffle(last(explode("-",$input['isbn'])).time()),0,10);
-        }
+        $input['slug'] = "Book-".substr(str_shuffle(rand(100000,999999).time()),0,10);
         $input['slug']= trim($input['slug']);
         $request->replace($input);
         $this->validate($request,[
@@ -67,16 +65,15 @@ class BookController extends Controller
             'category' => 'required',
             'publication'=>'required',
             'writers'=>'required',
-            'isbn'=>'required|unique:books',
             'description'=>'required',
             'text'=>'required',
             'file'=>'required',
             'image' =>   'required|mimes:jpg,jpeg,bmp,png',
         ]);
-
+        $helper = new \App\Helpers\Helper();
         $fileURL = null;
         if ($request->hasFile('image')) {
-            $desPath = "uploads/books/".$request->get('isbn').'/'.date("Ymd");
+            $desPath = "uploads/books/".$request->get('slug').'/'.date("Ymd");
             if(!is_dir($desPath))
                 mkdir($desPath,0775,true);
             $rand = $this->generateRandomString(30);
@@ -95,7 +92,7 @@ class BookController extends Controller
         $bookURL = null;
         if (!empty($file)) {
             $extension = last(explode(".",$file));
-            $desPath = "uploads/books/".$request->get('isbn').'/'.date("Ymd");
+            $desPath = "uploads/books/".$request->get('slug').'/'.date("Ymd");
             if(!is_dir($desPath))
                 mkdir($desPath,0775,true);
             $rand = $this->generateRandomString(30);
@@ -106,6 +103,8 @@ class BookController extends Controller
             }
             if(rename($file,$desPath.'/'.$fileName)){
                 $bookURL = $desPath.'/'.$fileName;
+                $bookURL = $helper->encrypte_file($bookURL,TRUE);
+                $helper->move_to_ftp($bookURL);
             }
         }
 
@@ -116,7 +115,7 @@ class BookController extends Controller
         $bookDemoURL = null;
         if (!empty($file_demo)) {
             $extension = last(explode(".",$file_demo));
-            $desPath = "uploads/books/".$request->get('isbn').'/'.date("Ymd");
+            $desPath = "uploads/books/".$request->get('slug').'/'.date("Ymd");
             if(!is_dir($desPath))
                 mkdir($desPath,0775,true);
             $rand = $this->generateRandomString(30);
@@ -127,12 +126,14 @@ class BookController extends Controller
             }
             if(rename($file_demo,$desPath.'/'.$fileName)){
                 $bookDemoURL = $desPath.'/'.$fileName;
+                $bookDemoURL = $helper->encrypte_file($bookDemoURL,TRUE);
+                $helper->move_to_ftp($bookDemoURL);
             }
         }
 
         while(\App\Book::where('slug',$request->get('slug'))->first()){
             $input = $request->all();
-            $input['slug'] = "Book-".substr(str_shuffle(last(explode("-",$input['isbn'])).time()),0,10);
+            $input['slug'] = "Book-".substr(str_shuffle(rand(100000,999999).time()),0,10);
             $request->replace($input);
 
         }
@@ -266,8 +267,8 @@ class BookController extends Controller
         }
         $input = $request->all();
         $input['title']= trim($input['title']);
-        $input['isbn']= trim($input['isbn']);
         $input['publication']= trim($input['publication']);
+        $input['slug'] = $book->slug;
         $request->replace($input);
         $rules = [
             'title'=>'required',
@@ -279,16 +280,13 @@ class BookController extends Controller
             'text'=>'required',
             'image' =>   'mimes:jpg,jpeg,bmp,png',
         ];
-        if($book->isbn != $request->get('isbn')){
-            $rules['isbn']='required|unique:posts';
-        }
-
+        $helper = new \App\Helpers\Helper();
         $this->validate($request,$rules);
 
 
         $fileURL = null;
         if ($request->hasFile('image')) {
-            $desPath = "uploads/books/".$request->get('isbn').'/'.date("Ymd");
+            $desPath = "uploads/books/".$request->get('slug').'/'.date("Ymd");
             if(!is_dir($desPath))
                 mkdir($desPath,0775,true);
             $rand = $this->generateRandomString(30);
@@ -306,7 +304,7 @@ class BookController extends Controller
         $bookURL = null;
         if (!empty($file)) {
             $extension = last(explode(".",$file));
-            $desPath = "uploads/books/".$request->get('isbn').'/'.date("Ymd");
+            $desPath = "uploads/books/".$request->get('slug').'/'.date("Ymd");
             if(!is_dir($desPath))
                 mkdir($desPath,0775,true);
             $rand = $this->generateRandomString(30);
@@ -317,6 +315,9 @@ class BookController extends Controller
             }
             if(rename($file,$desPath.'/'.$fileName)){
                 $bookURL = $desPath.'/'.$fileName;
+                $bookURL = $helper->encrypte_file($bookURL,TRUE);
+                $helper->move_to_ftp($bookURL);
+
             }
         }
 
@@ -325,7 +326,7 @@ class BookController extends Controller
         $bookDemoURL = null;
         if (!empty($file_demo)) {
             $extension = last(explode(".",$file_demo));
-            $desPath = "uploads/books/".$request->get('isbn').'/'.date("Ymd");
+            $desPath = "uploads/books/".$request->get('slug').'/'.date("Ymd");
             if(!is_dir($desPath))
                 mkdir($desPath,0775,true);
             $rand = $this->generateRandomString(30);
@@ -336,6 +337,9 @@ class BookController extends Controller
             }
             if(rename($file_demo,$desPath.'/'.$fileName)){
                 $bookDemoURL = $desPath.'/'.$fileName;
+                $bookDemoURL = $helper->encrypte_file($bookDemoURL,TRUE);
+                $helper->move_to_ftp($bookDemoURL);
+
             }
         }
 
