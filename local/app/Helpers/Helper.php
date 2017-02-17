@@ -63,9 +63,10 @@ class Helper
     public function encrypt_file($file , $remove_original = FALSE){
         $resfile = public_path($file);
         $desfile = $resfile.".enc";
+        die("openssl enc -aes-256-cbc -salt -in {$resfile} -out {$desfile} -pass file:/root/key.bin");
         exec("openssl enc -aes-256-cbc -salt -in {$resfile} -out {$desfile} -pass file:/root/key.bin");
         if($remove_original == TRUE){
-            unlink(public_path($file));
+//            unlink(public_path($file));
         }
         return $file.'.enc';
     }
