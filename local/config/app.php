@@ -107,6 +107,8 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
+    'safe_key' => 'Pi5dRyzmjhslixjW5sJZju2M5tOIs',
+
     /*
     |--------------------------------------------------------------------------
     | Logging Configuration

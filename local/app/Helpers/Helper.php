@@ -63,10 +63,10 @@ class Helper
     public function encrypt_file($file , $remove_original = FALSE){
         $resfile = public_path($file);
         $desfile = $resfile.".enc";
-        die("openssl enc -aes-256-cbc -salt -in {$resfile} -out {$desfile} -pass file:/root/key.bin");
-        exec("openssl enc -aes-256-cbc -salt -in {$resfile} -out {$desfile} -pass file:/root/key.bin");
+        $key = config("app.safe_key");
+        exec("openssl enc -aes-256-cbc -salt -in {$resfile} -out {$desfile} -k {$key}");
         if($remove_original == TRUE){
-//            unlink(public_path($file));
+            unlink(public_path($file));
         }
         return $file.'.enc';
     }
@@ -74,7 +74,8 @@ class Helper
     public function decrypt_file($file){
         $resfile = public_path($file);
         $desfile = substr($resfile,0,-4);
-        exec("openssl enc -d -aes-256-cbc -in {$resfile} -out {$desfile} -pass file:/root/key.bin");
+        $key = config("app.safe_key");
+        exec("openssl enc -d -aes-256-cbc -in {$resfile} -out {$desfile} -k {$key}");
         return $desfile;
     }
 
