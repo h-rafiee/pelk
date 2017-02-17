@@ -144,7 +144,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="isbn">شابک :</label>
-                                <input type="text" class="form-control" value="{{@$model->isbn}}" name="isbn" id="isbn" placeholder="شابک ..." required>
+                                <input type="text" class="form-control" value="{{@$model->isbn}}" name="isbn" id="isbn" placeholder="شابک ...">
                             </div>
                             <div class="form-group">
                                 <label for="publish_date">تاریخ انتشار :</label>
