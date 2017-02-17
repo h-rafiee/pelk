@@ -53,7 +53,7 @@ class Helper
             $path['dirname'] = 'pelck/'.$path['dirname'];
             $file = public_path($file);
             $ftp->makeDirRecursive($path['dirname']);
-            if($ftp->uploadFile($file,$path['dirname'].'/'.$path['filename'])){
+            if($ftp->uploadFile($file,'/'.$path['dirname'].'/'.$path['filename'].'.'.$path['extension'])){
                 unlink($file);
             }
         }
