@@ -46,7 +46,7 @@ class Helper
     }
 
     public function move_to_ftp($file){
-        $ftp = new \FtpClient\FtpClient();
+        $ftp = new \App\FtpClient\FtpClient();
         $ftp->connect(config('ftp.ip'));
         $ftp->login(config('ftp.user'), config('ftp.password'));
         $file = public_path($file);
