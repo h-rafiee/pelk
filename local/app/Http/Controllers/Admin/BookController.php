@@ -103,7 +103,7 @@ class BookController extends Controller
             }
             if(rename($file,$desPath.'/'.$fileName)){
                 $bookURL = $desPath.'/'.$fileName;
-                $bookURL = $helper->encrypte_file($bookURL,TRUE);
+                $bookURL = $helper->encrypt_file($bookURL,TRUE);
                 $helper->move_to_ftp($bookURL);
             }
         }
@@ -126,7 +126,7 @@ class BookController extends Controller
             }
             if(rename($file_demo,$desPath.'/'.$fileName)){
                 $bookDemoURL = $desPath.'/'.$fileName;
-                $bookDemoURL = $helper->encrypte_file($bookDemoURL,TRUE);
+                $bookDemoURL = $helper->encrypt_file($bookDemoURL,TRUE);
                 $helper->move_to_ftp($bookDemoURL);
             }
         }
@@ -315,7 +315,7 @@ class BookController extends Controller
             }
             if(rename($file,$desPath.'/'.$fileName)){
                 $bookURL = $desPath.'/'.$fileName;
-                $bookURL = $helper->encrypte_file($bookURL,TRUE);
+                $bookURL = $helper->encrypt_file($bookURL,TRUE);
                 $helper->move_to_ftp($bookURL);
 
             }
@@ -337,7 +337,7 @@ class BookController extends Controller
             }
             if(rename($file_demo,$desPath.'/'.$fileName)){
                 $bookDemoURL = $desPath.'/'.$fileName;
-                $bookDemoURL = $helper->encrypte_file($bookDemoURL,TRUE);
+                $bookDemoURL = $helper->encrypt_file($bookDemoURL,TRUE);
                 $helper->move_to_ftp($bookDemoURL);
 
             }

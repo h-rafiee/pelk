@@ -97,7 +97,7 @@ class MagazineController extends Controller
             }
             if(rename($file,$desPath.'/'.$fileName)){
                 $magURL = $desPath.'/'.$fileName;
-                $magURL = $helper->encrypte_file($magURL,TRUE);
+                $magURL = $helper->encrypt_file($magURL,TRUE);
             }
         }
 
@@ -116,7 +116,7 @@ class MagazineController extends Controller
             }
             if(rename($file_demo,$desPath.'/'.$fileName)){
                 $magDemoURL = $desPath.'/'.$fileName;
-                $magDemoURL = $helper->encrypte_file($magDemoURL,TRUE);
+                $magDemoURL = $helper->encrypt_file($magDemoURL,TRUE);
 
             }
         }
@@ -268,7 +268,7 @@ class MagazineController extends Controller
             }
             if(rename($file,$desPath.'/'.$fileName)){
                 $magURL = $desPath.'/'.$fileName;
-                $magURL = $helper->encrypte_file($magURL,TRUE);
+                $magURL = $helper->encrypt_file($magURL,TRUE);
 
             }
         }
@@ -288,7 +288,7 @@ class MagazineController extends Controller
             }
             if(rename($file_demo,$desPath.'/'.$fileName)){
                 $magDemoURL = $desPath.'/'.$fileName;
-                $magDemoURL = $helper->encrypte_file($magDemoURL,TRUE);
+                $magDemoURL = $helper->encrypt_file($magDemoURL,TRUE);
 
             }
         }
