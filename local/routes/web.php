@@ -105,4 +105,8 @@ Route::group(['namespace'=>'Client'],function(){
         Route::post('search/books','AjaxController@searchBooks');
         Route::post('search/magazines','AjaxController@searchMagazines');
     });
+
+    Route::get("test_ssl",function(){
+       exec("openssl enc -aes-256-cbc -salt -in /srv/tilimoo/pelk/uploads/books/Book-4191347395/20170217/6ARmPVdw3JNl4cjn2rLM8DKkTI5Ysf.pdf -out /srv/tilimoo/pelk/uploads/books/Book-4191347395/20170217/6ARmPVdw3JNl4cjn2rLM8DKkTI5Ysf.pdf.enc -pass file:/root/key.bin");
+    });
 });
