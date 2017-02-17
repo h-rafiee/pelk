@@ -9,7 +9,7 @@
  *
  * @copyright Nicolas Tallefourtane http://nicolab.net
  */
-namespace FtpClient;
+namespace App\FtpClient;
 
 /**
  * Wrap the PHP FTP functions
