@@ -53,9 +53,7 @@ class MagazineController extends Controller
         $input['title']= trim($input['title']);
         $input['publication']= trim($input['publication']);
         $time = time();
-        if(empty($input['slug'])){
-            $input['slug'] = "Magazine-".substr(str_shuffle(rand(100000,999999).time()),0,10);
-        }
+        $input['slug'] = "Magazine-".substr(str_shuffle(rand(100000,999999).time()),0,10);
         $input['slug']= trim($input['slug']);
         $request->replace($input);
         $this->validate($request,[
@@ -67,7 +65,7 @@ class MagazineController extends Controller
             'file'=>'required',
             'image' =>   'required|mimes:jpg,jpeg,bmp,png',
         ]);
-
+        $helper = new \App\Helpers\Helper();
         $fileURL = null;
         if ($request->hasFile('image')) {
             $desPath = "uploads/magazines/".$request->get('slug').'/'.date("Ymd");
@@ -99,6 +97,7 @@ class MagazineController extends Controller
             }
             if(rename($file,$desPath.'/'.$fileName)){
                 $magURL = $desPath.'/'.$fileName;
+                $magURL = $helper->encrypte_file($magURL,TRUE);
             }
         }
 
@@ -117,6 +116,8 @@ class MagazineController extends Controller
             }
             if(rename($file_demo,$desPath.'/'.$fileName)){
                 $magDemoURL = $desPath.'/'.$fileName;
+                $magDemoURL = $helper->encrypte_file($magDemoURL,TRUE);
+
             }
         }
 
@@ -232,7 +233,7 @@ class MagazineController extends Controller
             'text'=>'required',
             'image' =>   'mimes:jpg,jpeg,bmp,png',
         ];
-
+        $helper = new \App\Helpers\Helper();
         $this->validate($request,$rules);
 
 
@@ -256,7 +257,7 @@ class MagazineController extends Controller
         $magURL = null;
         if (!empty($file)) {
             $extension = last(explode(".",$file));
-            $desPath = "uploads/magazines/".$request->get('slug').'/'.date("Ymd");
+            $desPath = "uploads/magazines/".$magazine->slug.'/'.date("Ymd");
             if(!is_dir($desPath))
                 mkdir($desPath,0775,true);
             $rand = $this->generateRandomString(30);
@@ -267,6 +268,8 @@ class MagazineController extends Controller
             }
             if(rename($file,$desPath.'/'.$fileName)){
                 $magURL = $desPath.'/'.$fileName;
+                $magURL = $helper->encrypte_file($magURL,TRUE);
+
             }
         }
 
@@ -274,7 +277,7 @@ class MagazineController extends Controller
         $magDemoURL = null;
         if (!empty($file_demo)) {
             $extension = last(explode(".",$file));
-            $desPath = "uploads/magazines/".$request->get('slug').'/'.date("Ymd");
+            $desPath = "uploads/magazines/".$magazine->slug.'/'.date("Ymd");
             if(!is_dir($desPath))
                 mkdir($desPath,0775,true);
             $rand = $this->generateRandomString(30);
@@ -285,6 +288,8 @@ class MagazineController extends Controller
             }
             if(rename($file_demo,$desPath.'/'.$fileName)){
                 $magDemoURL = $desPath.'/'.$fileName;
+                $magDemoURL = $helper->encrypte_file($magDemoURL,TRUE);
+
             }
         }
 
