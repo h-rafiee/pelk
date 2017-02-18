@@ -83,6 +83,7 @@ class MagazineController extends Controller
         }
 
         $file = $request->get('file');
+        $ftpFiles = [];
         $magURL = null;
         if (!empty($file)) {
             $extension = last(explode(".",$file));
@@ -98,6 +99,8 @@ class MagazineController extends Controller
             if(rename($file,$desPath.'/'.$fileName)){
                 $magURL = $desPath.'/'.$fileName;
                 $magURL = $helper->encrypt_file($magURL,TRUE);
+                $ftpFiles[]=$magURL;
+
             }
         }
 
@@ -117,9 +120,11 @@ class MagazineController extends Controller
             if(rename($file_demo,$desPath.'/'.$fileName)){
                 $magDemoURL = $desPath.'/'.$fileName;
                 $magDemoURL = $helper->encrypt_file($magDemoURL,TRUE);
-
+                $ftpFiles[]=$magDemoURL;
             }
         }
+        $helper->move_to_ftp($ftpFiles);
+
 
         while(\App\Magazine::where('slug',$request->get('slug'))->first()){
             $input = $request->all();
@@ -254,6 +259,7 @@ class MagazineController extends Controller
         }
 
         $file = $request->get('file');
+        $ftpFiles = [];
         $magURL = null;
         if (!empty($file)) {
             $extension = last(explode(".",$file));
@@ -269,6 +275,7 @@ class MagazineController extends Controller
             if(rename($file,$desPath.'/'.$fileName)){
                 $magURL = $desPath.'/'.$fileName;
                 $magURL = $helper->encrypt_file($magURL,TRUE);
+                $ftpFiles[] = $magURL;
 
             }
         }
@@ -289,10 +296,11 @@ class MagazineController extends Controller
             if(rename($file_demo,$desPath.'/'.$fileName)){
                 $magDemoURL = $desPath.'/'.$fileName;
                 $magDemoURL = $helper->encrypt_file($magDemoURL,TRUE);
+                $ftpFiles[] = $magDemoURL;
 
             }
         }
-
+        $helper->move_to_ftp($ftpFiles);
         if(is_numeric($request->get('publication'))){
             $publication = \App\Publication::find($request->get('publication'));
         }else{
