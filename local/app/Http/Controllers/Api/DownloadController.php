@@ -23,6 +23,18 @@ class DownloadController extends Controller
             return response()->json($data);
         }
         $file = ($demo==0)?$item->book->file:$item->book->file_demo;
+        $helper = new \App\Helpers\Helper();
+        $helper->download_from_ftp($file);
+        $dfile = $helper->decrypt_file($file);
+        if(empty($item->original_key)){
+            $key = $helper->generate_user_key();
+            $item->original_key = $key['original_key'];
+            $item->key = $key['encrypt_key'];
+            $item->public = $key['public_key'];
+            $item->private = $key['private_key'];
+            $item->save();
+        }
+        $file = $helper->encrypt_for_user($dfile,$item->original_key);
         $file = public_path($file);
         return response()->download($file);
     }
@@ -41,6 +53,18 @@ class DownloadController extends Controller
             return response()->json($data);
         }
         $file = ($demo==0)?$item->magazine->file:$item->magazine->file_demo;
+        $helper = new \App\Helpers\Helper();
+        $helper->download_from_ftp($file);
+        $dfile = $helper->decrypt_file($file);
+        if(empty($item->original_key)){
+            $key = $helper->generate_user_key();
+            $item->original_key = $key['original_key'];
+            $item->key = $key['encrypt_key'];
+            $item->public = $key['public_key'];
+            $item->private = $key['private_key'];
+            $item->save();
+        }
+        $file = $helper->encrypt_for_user($dfile,$item->original_key);
         $file = public_path($file);
         return response()->download($file);
     }
