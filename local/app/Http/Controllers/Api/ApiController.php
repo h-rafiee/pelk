@@ -227,4 +227,52 @@ class ApiController extends Controller
         }
         return response()->json($data);
     }
+
+
+    public function category($category_id , $page = 1){
+        $data['status']='success';
+        $limit = 5 ;
+        $offset = ($page - 1)*$limit;
+
+        $books = \App\Book::with(['writers','translators','tags','publication','category'])
+            ->where('category_id',$category_id)
+            ->where('active',1)->skip($offset)->take($limit)
+            ->orderBy('created_at','DESC')
+            ->get();
+
+        $magazines = \App\Magazine::with(['tags','publication','category'])
+            ->where('category_id',$category_id)
+            ->where('active',1)->skip($offset)->take($limit)
+            ->orderBy('created_at','DESC')
+            ->get();
+        $data['books'] = $books;
+        $data['magazines'] = $magazines;
+        return response()->json($data);
+
+    }
+
+    public function tag($tag_id , $page = 1 ){
+        $data['status']='success';
+        $limit = 5 ;
+        $offset = ($page - 1)*$limit;
+
+        $books = \App\Book::with(['writers','translators','tags','publication','category'])
+            ->whereHas('tags',function($query) use ($tag_id){
+                $query->where('id',$tag_id);
+            })
+            ->where('active',1)->skip($offset)->take($limit)
+            ->orderBy('created_at','DESC')
+            ->get();
+
+        $magazines = \App\Magazine::with(['tags','publication','category'])
+            ->whereHas('tags',function($query) use ($tag_id){
+                $query->where('id',$tag_id);
+            })
+            ->where('active',1)->skip($offset)->take($limit)
+            ->orderBy('created_at','DESC')
+            ->get();
+        $data['books'] = $books;
+        $data['magazines'] = $magazines;
+        return response()->json($data);
+    }
 }

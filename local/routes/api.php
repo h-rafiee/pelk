@@ -93,6 +93,8 @@ Route::group(['namespace'=>'Api'],function(){
         Route::get('translator/{id}/{page?}','ApiController@translator');
 
         Route::get('search/{page?}','ApiController@search');
+        Route::get('category/{category_id}/{page?}','ApiController@category');
+        Route::get('tag/{tag_id}/{page?}','ApiController@tag');
 
         Route::get('book/{id}','BookController@book');
         Route::get('books/{page?}/{orderBy?}/{order?}','BookController@books');
