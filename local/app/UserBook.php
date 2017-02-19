@@ -8,6 +8,10 @@ class UserBook extends Model
 {
     protected $table = '_user_book';
 
+    protected $hidden = [
+        'original_key'
+    ];
+
     public function book(){
         return $this->belongsTo('App\Book');
     }
