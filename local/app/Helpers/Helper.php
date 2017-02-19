@@ -45,6 +45,16 @@ class Helper
         return $success;
     }
 
+    public function download_from_ftp($file){
+        $ftp = new \App\FTPClient\FTPClient();
+        $ftp->connect(config('ftp.ip'),config('ftp.user'),config('ftp.password'));
+        $path = pathinfo($file);
+        $path['dirname'] = 'pelck/'.$path['dirname'];
+        $file = public_path($file);
+        $ftp->downloadFile('/'.$path['dirname'].'/'.$path['filename'].'.'.$path['extension'],$file);
+        return TRUE;
+    }
+
     public function move_to_ftp($files = []){
         $ftp = new \App\FTPClient\FTPClient();
         $ftp->connect(config('ftp.ip'),config('ftp.user'),config('ftp.password'));
@@ -79,19 +89,19 @@ class Helper
         return $desfile;
     }
 
-    public function encrypt_for_user($file){
-        $resfile = public_path($file);
-        $desfile = substr($resfile,0,-4).'.plc';
+    public function generate_user_key(){
         $bytes = openssl_random_pseudo_bytes(6);
         $key = bin2hex($bytes);
-        exec("openssl enc -d -aes-256-cbc -in {$resfile} -out {$desfile} -K $key");
         $encryptData = $this->encrypt_key($key);
-        $data = [
-            'file'=>$desfile,
-            'original_key'=>$key,
-            'encrypt_data' => $encryptData
-        ];
-        return $data;
+        $encryptData['original_key'] = $key;
+        return $encryptData;
+    }
+
+    public function encrypt_for_user($file , $key){
+        $resfile = public_path($file);
+        $desfile = substr($resfile,0,-4).'.plc';
+        exec("openssl enc -d -aes-256-cbc -in {$resfile} -out {$desfile} -K $key");
+        return substr($file,0,-4).'.plc';
     }
 
     private function encrypt_key($key){
