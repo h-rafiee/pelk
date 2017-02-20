@@ -199,4 +199,25 @@ class BookController extends Controller
         $value = $items->where('price','>=',$start)->where('price','<=',$end);
         return $value->all();
     }
+
+    public function read(Request $request,$id,$demo = 'F'){
+        $user_id = $request->user()->id;
+        $demo = ($demo=='T')?1:0;
+        $item = \App\UserBook::with(['book'])
+            ->where('user_id',$user_id)
+            ->where('book_id',$id)
+            ->where('demo',$demo)
+            ->first();
+
+        if(empty($item)){
+            $data['status']='fail';
+            $data['message']='not item found';
+            return response()->json($data);
+        }
+        $item->page = $request->get('page');
+        $item->save();
+        $data['status'] = 'done';
+        $data['message'] = 'Book is page '.$item->page;
+        return response()->json($data);
+    }
 }

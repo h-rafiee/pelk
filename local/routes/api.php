@@ -81,6 +81,13 @@ Route::group(['namespace'=>'Api'],function(){
         Route::post('order','OrderController@order');
         Route::get('bill/{code}','OrderController@bill');
         Route::get('payments','OrderController@payments');
+
+        Route::get('open/book/{id}/{demo?}','DownloadController@openBook');
+        Route::get('open/magazine/{id}/{demo?}','DownloadController@openMagazine');
+
+        Route::post('read/book/{id}/{demo?}','BookController@read');
+        Route::post('read/magazine/{id}/{demo?}','MagazineController@read');
+
     });
 
     Route::group(['middleware'=>'client_credentials'],function(){

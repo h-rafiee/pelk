@@ -68,4 +68,44 @@ class DownloadController extends Controller
         $file = public_path($file);
         return response()->download($file);
     }
+
+    public function openBook(Request $request,$id,$demo = 'F'){
+        $user_id = $request->user()->id;
+        $demo = ($demo=='T')?1:0;
+        $item = \App\UserBook::with(['book'])
+            ->where('user_id',$user_id)
+            ->where('book_id',$id)
+            ->where('demo',$demo)
+            ->first();
+
+        if(empty($item)){
+            $data['status']='fail';
+            $data['message']='not item found';
+            return response()->json($data);
+        }
+
+        $data['status']='done';
+        $data['info'] = $item;
+        return response()->json($data);
+    }
+
+    public function openMagazine(Request $request,$id,$demo = 'F'){
+        $user_id = $request->user()->id;
+        $demo = ($demo=='T')?1:0;
+        $item = \App\UserMagazine::with(['magazine'])
+            ->where('user_id',$user_id)
+            ->where('magazine_id',$id)
+            ->where('demo',$demo)
+            ->first();
+
+        if(empty($item)){
+            $data['status']='fail';
+            $data['message']='not item found';
+            return response()->json($data);
+        }
+
+        $data['status']='done';
+        $data['info'] = $item;
+        return response()->json($data);
+    }
 }
