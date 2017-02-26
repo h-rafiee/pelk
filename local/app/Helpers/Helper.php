@@ -102,7 +102,8 @@ class Helper
     public function encrypt_for_user($file , $key){
         $resfile = public_path($file);
         $desfile = substr($resfile,0,-4).'.plc';
-        exec("openssl enc -d -aes-256-cbc -in {$resfile} -out {$desfile} -k $key");
+        exec("openssl enc -d -aes-256-cbc -in {$resfile} -out {$desfile} -k {$key}",$error);
+        die(var_export($error));
         return substr($file,0,-4).'.plc';
     }
 
