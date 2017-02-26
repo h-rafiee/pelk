@@ -103,6 +103,7 @@ class Helper
         $resfile = $file;
         $desfile = substr($resfile,0,-4).'.plc';
         exec("openssl enc -d -aes-256-cbc -in {$resfile} -out {$desfile} -k {$key}");
+        die("openssl enc -d -aes-256-cbc -in {$resfile} -out {$desfile} -k {$key}");
         return $desfile;
     }
 
