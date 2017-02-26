@@ -35,7 +35,6 @@ class DownloadController extends Controller
             $item->save();
         }
         $file = $helper->encrypt_for_user($dfile,$item->original_key);
-        $file = public_path($file);
         return response()->download($file);
     }
 
@@ -65,7 +64,6 @@ class DownloadController extends Controller
             $item->save();
         }
         $file = $helper->encrypt_for_user($dfile,$item->original_key);
-        $file = public_path($file);
         return response()->download($file);
     }
 
