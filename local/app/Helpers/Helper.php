@@ -51,8 +51,10 @@ class Helper
         $path = pathinfo($file);
         $path['dirname'] = 'pelck/'.$path['dirname'];
         $file = public_path($file);
-        $ftp->downloadFile('/'.$path['dirname'].'/'.$path['filename'].'.'.$path['extension'],$file);
+        if($ftp->downloadFile('/'.$path['dirname'].'/'.$path['filename'].'.'.$path['extension'],$file))
         return TRUE;
+        else
+        die("FTP DOWNLOAD FAIL");
     }
 
     public function move_to_ftp($files = []){
