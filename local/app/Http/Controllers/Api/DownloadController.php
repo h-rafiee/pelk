@@ -35,7 +35,10 @@ class DownloadController extends Controller
             $item->save();
         }
         $file = $helper->encrypt_for_user($dfile,$item->original_key);
-        return response()->download($file);
+        $headers = array(
+            'Content-Type: application/octet-stream',
+        );
+        return response()->download($file,str_random(5).".plc",$headers);
     }
 
     function magazine(Request $request , $id , $demo='F'){
@@ -64,7 +67,10 @@ class DownloadController extends Controller
             $item->save();
         }
         $file = $helper->encrypt_for_user($dfile,$item->original_key);
-        return response()->download($file);
+        $headers = array(
+            'Content-Type: application/octet-stream',
+        );
+        return response()->download($file,str_random(5).".plc",$headers);
     }
 
     public function openBook(Request $request,$id,$demo = 'F'){
