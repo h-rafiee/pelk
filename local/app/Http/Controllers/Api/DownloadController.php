@@ -29,7 +29,7 @@ class DownloadController extends Controller
         if(empty($item->original_key)){
             $key = $helper->generate_user_key();
             $item->original_key = $key['original_key'];
-            $item->key = $key['encrypt_key'];
+            $item->key = base64_encode($key['encrypt_key']);
             $item->public = $key['public_key'];
             $item->private = $key['private_key'];
             $item->save();
@@ -59,7 +59,7 @@ class DownloadController extends Controller
         if(empty($item->original_key)){
             $key = $helper->generate_user_key();
             $item->original_key = $key['original_key'];
-            $item->key = $key['encrypt_key'];
+            $item->key = base64_encode($key['encrypt_key']);
             $item->public = $key['public_key'];
             $item->private = $key['private_key'];
             $item->save();
@@ -83,7 +83,7 @@ class DownloadController extends Controller
             $data['message']='not item found';
             return response()->json($data);
         }
-
+        $item->key = base64_decode($item->key);
         $data['status']='done';
         $data['info'] = $item;
         return response()->json($data);
@@ -103,7 +103,7 @@ class DownloadController extends Controller
             $data['message']='not item found';
             return response()->json($data);
         }
-
+        $item->key = base64_decode($item->key);
         $data['status']='done';
         $data['info'] = $item;
         return response()->json($data);
