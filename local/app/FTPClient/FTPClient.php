@@ -124,7 +124,8 @@ class FTPClient {
 
         // *** Set the transfer mode
         $asciiArray = array('txt', 'csv');
-        $extension = end(explode('.', $fileFrom));
+        $file_split = explode('.', $fileFrom);
+        $extension = end($file_split);
         if (in_array($extension, $asciiArray)) {
             $mode = FTP_ASCII;
         } else {
