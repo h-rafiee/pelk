@@ -87,7 +87,6 @@ class DownloadController extends Controller
             $data['message']='not item found';
             return response()->json($data);
         }
-        $item->key = base64_decode($item->key);
         $data['status']='done';
         $data['info'] = $item;
         return response()->json($data);
@@ -107,7 +106,6 @@ class DownloadController extends Controller
             $data['message']='not item found';
             return response()->json($data);
         }
-        $item->key = base64_decode($item->key);
         $data['status']='done';
         $data['info'] = $item;
         return response()->json($data);
