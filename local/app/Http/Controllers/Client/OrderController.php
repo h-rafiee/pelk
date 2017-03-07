@@ -91,6 +91,7 @@ class OrderController extends Controller
         $pay->setAmount($order->price);
         $pay->setRedirect(url("payment/retrieve/{$payment->slug}/{$order->code}"));
         $result = $pay->send($order->id);
+        dd($result);
         $orderPay = \App\OrderPayment::updateOrCreate(
             ['order_id' => $order->id, 'payment_id' => $payment->id],
             ['params' => json_encode($result)]
