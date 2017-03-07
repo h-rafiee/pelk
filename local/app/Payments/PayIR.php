@@ -12,7 +12,7 @@ class PayIR extends Payment {
             'factorNumber'=>$order_id,
         ];
 
-        $handle = curl_init('https://pay.ir/payment/send');
+        $handle = curl_init('http://pay.ir/payment/send');
         curl_setopt($handle, CURLOPT_POSTFIELDS, http_build_query($data));
         curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($handle, CURLOPT_RETURNTRANSFER, TRUE);
@@ -50,7 +50,7 @@ class PayIR extends Payment {
             'transId'=>$result->transId,
         ];
 
-        $handle = curl_init('https://pay.ir/payment/verify');
+        $handle = curl_init('http://pay.ir/payment/verify');
         curl_setopt($handle, CURLOPT_POSTFIELDS, http_build_query($data));
         curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($handle, CURLOPT_RETURNTRANSFER, TRUE);
