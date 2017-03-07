@@ -72,6 +72,7 @@ Route::post('/admin-login',['middleware' => 'admin.guest','uses'=>'Admin\AdminCo
 
 Route::group(['namespace'=>'Client'],function(){
     Route::get('/','ClientController@getHome');
+    Route::get('last','ClientController@getLast');
     Route::get('intro','ClientController@getIntro');
     Route::get('categories','ClientController@getCategories');
     Route::get('login',['middleware'=>'guest','uses'=>'ClientController@getLogin']);

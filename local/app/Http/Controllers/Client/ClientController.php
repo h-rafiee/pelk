@@ -73,6 +73,13 @@ class ClientController extends Controller
         return view('home',$home);
     }
 
+    function getLast(){
+        $books = collect(\App\Book::where('active',1)->orderBy('created_at','DESC')->get());
+        $magazines = collect(\App\Magazine::where('active',1)->orderBy('created_at','DESC')->get());
+        $data['last'] = $books->merge($magazines)->sortByDesc('created_at')->take(20);
+        return view('last',$data);
+    }
+
     function getIntro(){
         return view('intro');
     }
