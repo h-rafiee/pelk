@@ -17,6 +17,9 @@ class PayIR extends Payment {
         curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($handle, CURLOPT_RETURNTRANSFER, TRUE);
         $result = curl_exec($handle);
+        if (curl_errno($handle)) {
+            dd(curl_error($handle));
+        }
         curl_close($handle);
         return json_decode($result);
     }
