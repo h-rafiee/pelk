@@ -92,7 +92,7 @@ class Helper
     }
 
     public function generate_user_key(){
-        $bytes = openssl_random_pseudo_bytes(6);
+        $bytes = openssl_random_pseudo_bytes(16);
         $key = bin2hex($bytes);
         $encryptData = $this->encrypt_key($key);
         $encryptData['original_key'] = $key;
