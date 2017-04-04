@@ -38,7 +38,8 @@ class DownloadController extends Controller
         $headers = array(
             'Content-Type: application/octet-stream',
         );
-        return response()->download($file,str_random(5).".plc",$headers);
+        $path_parts = pathinfo($file);
+        return response()->download($file,$path_parts['basename'],$headers);
     }
 
     function magazine(Request $request , $id , $demo='F'){
@@ -70,7 +71,8 @@ class DownloadController extends Controller
         $headers = array(
             'Content-Type: application/octet-stream',
         );
-        return response()->download($file,str_random(5).".plc",$headers);
+        $path_parts = pathinfo($file);
+        return response()->download($file,$path_parts['basename'],$headers);
     }
 
     public function openBook(Request $request,$id,$demo = 'F'){
