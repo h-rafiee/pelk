@@ -94,6 +94,7 @@ class Helper
     public function generate_user_key(){
         $bytes = openssl_random_pseudo_bytes(16);
         $key = bin2hex($bytes);
+        $key = $this->hex2str($key);
         $encryptData = $this->encrypt_key($key);
         $encryptData['original_key'] = $key;
         return $encryptData;
@@ -123,5 +124,13 @@ class Helper
             'encrypt_key'=>$encrypted
         ];
         return $data;
+    }
+
+    private function hex2str($h)
+    {
+        if (!is_string($h)) return null;
+        $r='';
+        for ($a=0; $a<strlen($h); $a+=2) { $r.=chr(hexdec($h{$a}.$h{($a+1)})); }
+        return $r;
     }
 }
