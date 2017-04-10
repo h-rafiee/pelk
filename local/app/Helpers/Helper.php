@@ -94,7 +94,6 @@ class Helper
     public function generate_user_key(){
         $bytes = openssl_random_pseudo_bytes(16);
         $key = bin2hex($bytes);
-        $key = $this->hex2str($key);
         $encryptData = $this->encrypt_key($key);
         $encryptData['original_key'] = $key;
         return $encryptData;
@@ -103,7 +102,7 @@ class Helper
     public function encrypt_for_user($file , $key){
         $resfile = $file;
         $desfile = $resfile.'.plc';
-        exec("openssl enc -aes-256-cbc -salt -in {$resfile} -out {$desfile} -k {$key}");
+        exec("openssl aes-128-cbc -K \"{$key}\" -iv \"{$key}\" -in {$resfile} -out {$desfile}");
         return $desfile;
     }
 
