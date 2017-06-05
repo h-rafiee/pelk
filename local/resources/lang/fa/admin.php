@@ -1,6 +1,6 @@
 <?php
 return [
-    'header_title' => 'پنل مدیریت پلک',
+    'header_title' => 'پنل مدیریت سامانه نشر الکترونیک',
     'back_to_website' => 'بازگش به وب سایت',
     'dashboard' => 'پیشخوان',
     'members' => 'اعضای سایت',

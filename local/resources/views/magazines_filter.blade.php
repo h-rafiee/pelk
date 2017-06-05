@@ -1,6 +1,6 @@
 @extends('layouts.pelk')
 
-@section('title','کتابخوان'.$title)
+@section('title','سامانه نشر الکترونیک'.$title)
 
 @section('main')
     <?php

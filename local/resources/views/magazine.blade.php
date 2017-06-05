@@ -1,6 +1,6 @@
 @extends('layouts.pelk')
 
-@section('title','کتابخوان | '.trans('admin.'.$type).' | '.$title)
+@section('title','سامانه نشر الکترونیک | '.trans('admin.'.$type).' | '.$title)
 
 @section('main')
     <div class="slider">

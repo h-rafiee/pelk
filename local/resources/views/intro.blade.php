@@ -7,7 +7,7 @@
         <div class="introduction">
             <h2>همه‌ی کتاب‌ها</h2>
             <h2>در جیب شما!</h2>
-            <h3>اپ کتابخوان برای تبلت و موبایل</h3>
+            <h3>اپ سامانه نشر الکترونیک برای تبلت و موبایل</h3>
             <div class="intro_link">
                 <a href="#" class="brown"><span>نسخه iOS</span>دانلود</a>
                 <a href="#" class="orange"><span>نسخه اندروید</span>دانلود</a>

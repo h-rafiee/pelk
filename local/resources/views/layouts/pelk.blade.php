@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>@yield('title','کتابخوان')</title>
+    <title>@yield('title','سامانه نشر الکترونیک')</title>
     <link href="{{asset('css/style.css')}}" rel="stylesheet" type="text/css">
     <link href="{{asset('css/idangerous.swiper.css')}}" rel="stylesheet" type="text/css">
     @yield('styles')
@@ -14,7 +14,7 @@
         <header>
             <section>
                 <nav>
-                    <a href="{{url('/')}}" class="ic ic-logo"><h1>فروشگاه کتابخوان</h1></a>
+                    <a href="{{url('/')}}" class="ic ic-logo"><h1>فروشگاه سامانه نشر الکترونیک</h1></a>
                     <div>
                         <a href="{{url('categories')}}" class="ic ic-cat {{@$cat_nav}}"></a>
                         <a href="{{url('login')}}" class="ic ic-user {{@$user_nav}}"></a>
