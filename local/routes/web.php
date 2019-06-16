@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Http\Request;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,6 +13,101 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+
+Route::group(['prefix'=>'admin','namespace'=>'Admin','middleware'=>'admin.auth'],function(){
+    Route::get('/',function(){
+        return view('admin.index');
+    });
+    Route::get('logout','AdminController@logout');
+
+   // Administrators
+    Route::resource('administrators','AdministratorController');
+
+   // Users
+    Route::resource('users','UserController');
+
+    // Tags
+    Route::resource('tags','TagController');
+
+    // Categories
+    Route::resource('categories','CategoryController');
+
+    // Books
+    Route::resource('books','BookController');
+
+    // Magazines
+    Route::resource('magazines','MagazineController');
+
+    // Promotes
+    Route::resource('web/sliders','PromoteController');
+
+
+    // Web Template
+    Route::get('web/template','AdminController@getWebTemplate');
+    Route::post('web/template','AdminController@postWebTemplate');
+
+    // Mob Template
+    Route::get('mobile/sliders','AdminController@getMobileSliders');
+    Route::post('mobile/sliders','AdminController@postMobileSliders');
+    Route::get('mobile/template','AdminController@getMobileTemplate');
+    Route::post('mobile/template','AdminController@postMobileTemplate');
+
+    // Ajax
+    Route::group(['middleware' => 'ajax','prefix'=>'ajax'],function(){
+        Route::post('upload','AjaxController@upload');
+        Route::get('categories/{banner?}','AjaxController@categories');
+        Route::get('tags/{banner?}','AjaxController@tags');
+        Route::get('publications/{banner?}','AjaxController@publications');
+        Route::get('writers/{banner?}','AjaxController@writers');
+        Route::get('translators/{banner?}','AjaxController@translators');
+        Route::get('books/{banner?}','AjaxController@writers');
+        Route::get('magazines/{banner?}','AjaxController@translators');
+    });
+
+});
+Route::get('/admin-login',['middleware' => 'admin.guest','uses'=>'Admin\AdminController@getLogin']);
+Route::post('/admin-login',['middleware' => 'admin.guest','uses'=>'Admin\AdminController@postLogin']);
+
+
+
+Route::group(['namespace'=>'Client'],function(){
+    Route::get('/','ClientController@getHome');
+    Route::get('last','ClientController@getLast');
+    Route::get('intro','ClientController@getIntro');
+    Route::get('categories','ClientController@getCategories');
+    Route::get('login',['middleware'=>'guest','uses'=>'ClientController@getLogin']);
+    Route::post('login',['middleware'=>'guest','uses'=>'ClientController@postLogin']);
+    Route::get('profile',['middleware'=>'auth','uses'=>'ClientController@getProfile']);
+    Route::post('profile/edit',['middleware' => 'auth','uses'=>'ClientController@editProfile']);
+    Route::get('search','ClientController@getSearch');
+
+    Route::get('books/categories/{title}','BookController@booksByCategory');
+    Route::get('books/tags/{title}','BookController@booksByTag');
+    Route::get('books/publications/{title}','BookController@booksByPublication');
+    Route::get('books/writers/{title}','BookController@booksByWriter');
+    Route::get('books/translators/{title}','BookController@booksByTranslator');
+
+    Route::get('magazines/categories/{title}','MagazineController@magazinesByCategory');
+    Route::get('magazines/tags/{title}','MagazineController@magazinesByTag');
+    Route::get('magazines/publications/{title}','MagazineController@magazinesByPublication');
+
+    Route::get('book/{slug}/{title?}','BookController@book');
+    Route::get('magazine/{slug}/{title?}','MagazineController@magazine');
+
+    Route::post('order', ['middleware'=>'auth','uses'=>'OrderController@postOrder']);
+    Route::get('bill/{code}/mob', 'OrderController@getBillMob');
+    Route::get('bill/{code}', ['middleware'=>'auth','uses'=>'OrderController@getBill']);
+    Route::post('bill/{code}',['middleware'=>'auth','uses'=>'OrderController@postBill']);
+    Route::post('payment/retrieve/{payment}/{code}/mob','OrderController@postRetrieveMob');
+    Route::post('payment/retrieve/{payment}/{code}',['middleware'=>'auth','uses'=>'OrderController@postRetrieve']);
+    Route::get('gateway/{payment_slug}/{order_code}','OrderController@gateway');
+
+    Route::group(['middleware' => 'ajax'],function(){
+        Route::post('search/books','AjaxController@searchBooks');
+        Route::post('search/magazines','AjaxController@searchMagazines');
+    });
+
+    Route::get("test_ssl",function(){
+       exec("openssl enc -aes-256-cbc -salt -in /srv/tilimoo/pelk/uploads/books/Book-4191347395/20170217/6ARmPVdw3JNl4cjn2rLM8DKkTI5Ysf.pdf -out /srv/tilimoo/pelk/uploads/books/Book-4191347395/20170217/6ARmPVdw3JNl4cjn2rLM8DKkTI5Ysf.pdf.enc -pass file:/root/key.bin");
+    });
 });

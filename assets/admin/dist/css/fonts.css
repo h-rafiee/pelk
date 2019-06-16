@@ -1,0 +1,11 @@
+@font-face {
+    font-family: 'Gandom-WOL';
+    src: url('../fonts/Gandom-WOL.eot'); /* IE9 Compat Modes */
+    src: url('../fonts/Gandom-WOL.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('../fonts/Gandom-WOL.woff') format('woff'), /* Pretty Modern Browsers */
+    url('../fonts/Gandom-WOL.ttf')  format('truetype') /* Safari, Android, iOS */
+}
+
+body{
+    font-family: 'Gandom-WOL',tahoma,Arial,sans-serif;
+}
